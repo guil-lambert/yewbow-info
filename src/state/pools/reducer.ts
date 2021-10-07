@@ -43,13 +43,25 @@ export interface PoolData {
   volumeUSDChange: number
   volumeUSDWeek: number
 
+  //fees
+  feeUSD: number
+
   // liquidity
   tvlUSD: number
   tvlUSDChange: number
 
+  // liquidity/TVL
+  voltvl: number
+  volLiq: number
+
   // prices
   token0Price: number
   token1Price: number
+
+  // token amounts at current Tick
+  tvlTickToken0: number
+  tvlTickToken1: number
+  tvlTickAvg: number
 
   // token amounts
   tvlToken0: number

@@ -6,7 +6,7 @@ import Hotkeys from 'react-hot-keys'
 import { useFetchSearchResults } from 'data/search'
 import { AutoColumn } from 'components/Column'
 import CurrencyLogo from 'components/CurrencyLogo'
-import { formatDollarAmount } from 'utils/numbers'
+import { formatDollarAmount, formatAmount } from 'utils/numbers'
 import DoubleCurrencyLogo from 'components/DoubleLogo'
 import { GreyBadge } from 'components/Card'
 import { feeTierPercent } from 'utils'
@@ -272,7 +272,7 @@ const Search = ({ ...rest }: React.HTMLAttributes<HTMLDivElement>) => {
               </HideSmall>
               <HideSmall>
                 <TYPE.main textAlign="end" fontSize="12px">
-                  Price
+                  Vol/TVL
                 </TYPE.main>
               </HideSmall>
             </ResponsiveGrid>
@@ -306,7 +306,7 @@ const Search = ({ ...rest }: React.HTMLAttributes<HTMLDivElement>) => {
                         <TYPE.label textAlign="end">{formatDollarAmount(t.tvlUSD)}</TYPE.label>
                       </HideSmall>
                       <HideSmall>
-                        <TYPE.label textAlign="end">{formatDollarAmount(t.priceUSD)}</TYPE.label>
+                        <TYPE.label textAlign="end">{formatAmount(t.voltvl, 3)}</TYPE.label>
                       </HideSmall>
                     </ResponsiveGrid>
                   </HoverRowLink>
@@ -339,7 +339,7 @@ const Search = ({ ...rest }: React.HTMLAttributes<HTMLDivElement>) => {
               </HideSmall>
               <HideSmall>
                 <TYPE.main textAlign="end" fontSize="12px">
-                  Price
+                  LP/√d
                 </TYPE.main>
               </HideSmall>
             </ResponsiveGrid>
@@ -374,7 +374,7 @@ const Search = ({ ...rest }: React.HTMLAttributes<HTMLDivElement>) => {
                         <TYPE.label textAlign="end">{formatDollarAmount(p.tvlUSD)}</TYPE.label>
                       </HideSmall>
                       <HideSmall>
-                        <TYPE.label textAlign="end">{formatDollarAmount(p.token0Price)}</TYPE.label>
+                        <TYPE.label textAlign="end">{formatAmount((p.volLiq * 100) / 0.05)}%</TYPE.label>
                       </HideSmall>
                     </ResponsiveGrid>
                   </HoverRowLink>

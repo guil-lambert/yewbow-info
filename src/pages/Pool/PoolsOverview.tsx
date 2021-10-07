@@ -1,13 +1,13 @@
 import React, { useEffect, useMemo } from 'react'
 import { PageWrapper } from 'pages/styled'
 import { AutoColumn } from 'components/Column'
-import { TYPE } from 'theme'
+import { TYPE, HideSmall } from 'theme'
 import PoolTable from 'components/pools/PoolTable'
 import { useAllPoolData, usePoolDatas } from 'state/pools/hooks'
 import { notEmpty } from 'utils'
 import { useSavedPools } from 'state/user/hooks'
 import { DarkGreyCard } from 'components/Card'
-// import TopPoolMovers from 'components/pools/TopPoolMovers'
+import TopPoolMovers from 'components/pools/TopPoolMovers'
 
 export default function PoolPage() {
   useEffect(() => {
@@ -36,14 +36,14 @@ export default function PoolPage() {
             <TYPE.main>Saved pools will appear here</TYPE.main>
           </DarkGreyCard>
         )}
-        {/* <HideSmall>
+        <HideSmall>
           <DarkGreyCard style={{ paddingTop: '12px' }}>
             <AutoColumn gap="md">
-              <TYPE.mediumHeader fontSize="16px">Trending by 24H Volume</TYPE.mediumHeader>
+              <TYPE.mediumHeader fontSize="16px">Trending by LP√d</TYPE.mediumHeader>
               <TopPoolMovers />
             </AutoColumn>
           </DarkGreyCard>
-        </HideSmall> */}
+        </HideSmall>
         <TYPE.main>All Pools</TYPE.main>
         <PoolTable poolDatas={poolDatas} />
       </AutoColumn>

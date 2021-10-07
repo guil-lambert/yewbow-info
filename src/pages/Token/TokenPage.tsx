@@ -20,7 +20,7 @@ import { ExternalLink, Download } from 'react-feather'
 import { ExternalLink as StyledExternalLink } from '../../theme/components'
 import useTheme from 'hooks/useTheme'
 import CurrencyLogo from 'components/CurrencyLogo'
-import { formatDollarAmount } from 'utils/numbers'
+import { formatDollarAmount, formatAmount } from 'utils/numbers'
 import Percent from 'components/Percent'
 import { ButtonPrimary, ButtonGray, SavedIcon } from 'components/Button'
 import { DarkGreyCard, LightGreyCard } from 'components/Card'
@@ -265,12 +265,12 @@ export default function TokenPage({
                     <Percent value={tokenData.volumeUSDChange} />
                   </AutoColumn>
                   <AutoColumn gap="4px">
-                    <TYPE.main fontWeight={400}>7d Trading Vol</TYPE.main>
-                    <TYPE.label fontSize="24px">{formatDollarAmount(tokenData.volumeUSDWeek)}</TYPE.label>
-                  </AutoColumn>
-                  <AutoColumn gap="4px">
                     <TYPE.main fontWeight={400}>24h Fees</TYPE.main>
                     <TYPE.label fontSize="24px">{formatDollarAmount(tokenData.feesUSD)}</TYPE.label>
+                  </AutoColumn>
+                  <AutoColumn gap="4px">
+                    <TYPE.main fontWeight={400}>Vol/TVL</TYPE.main>
+                    <TYPE.label fontSize="24px">{formatAmount(tokenData.voltvl)}</TYPE.label>
                   </AutoColumn>
                 </AutoColumn>
               </DarkGreyCard>

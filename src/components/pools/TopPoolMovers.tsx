@@ -5,7 +5,7 @@ import Loader from 'components/Loader'
 import { AutoColumn } from 'components/Column'
 import { RowFixed } from 'components/Row'
 import { TYPE, StyledInternalLink } from 'theme'
-import { formatDollarAmount } from 'utils/numbers'
+import { formatDollarAmount, formatAmount } from 'utils/numbers'
 import Percent from 'components/Percent'
 import { useAllPoolData } from 'state/pools/hooks'
 import { PoolData } from 'state/pools/reducer'
@@ -42,8 +42,7 @@ const DataCard = ({ poolData }: { poolData: PoolData }) => {
             </GreyBadge>
           </RowFixed>
           <RowFixed>
-            <TYPE.label mr="6px">{formatDollarAmount(poolData.volumeUSD)}</TYPE.label>
-            <Percent fontSize="14px" value={poolData.volumeUSDChange} />
+            <TYPE.label mr="6px">{formatAmount((poolData.volLiq * 100) / 0.05)}% | APY: {formatAmount(poolData.voltvl * 365 * 100)}%</TYPE.label>
           </RowFixed>
         </AutoColumn>
       </Wrapper>
@@ -57,7 +56,7 @@ export default function TopPoolMovers() {
   const topVolume = useMemo(() => {
     return Object.values(allPools)
       .sort(({ data: a }, { data: b }) => {
-        return a && b ? (a?.volumeUSDChange > b?.volumeUSDChange ? -1 : 1) : -1
+        return a && b ? (a?.volLiq > b?.volLiq ? -1 : 1) : -1
       })
       .slice(0, Math.min(20, Object.values(allPools).length))
   }, [allPools])

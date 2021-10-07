@@ -6,7 +6,7 @@ import { DarkGreyCard, GreyBadge } from 'components/Card'
 import Loader, { LoadingRows } from 'components/Loader'
 import { AutoColumn } from 'components/Column'
 import { RowFixed } from 'components/Row'
-import { formatDollarAmount } from 'utils/numbers'
+import { formatDollarAmount, formatAmount } from 'utils/numbers'
 import { PoolData } from 'state/pools/reducer'
 import DoubleCurrencyLogo from 'components/DoubleLogo'
 import { feeTierPercent } from 'utils'
@@ -26,7 +26,7 @@ const ResponsiveGrid = styled.div`
   grid-gap: 1em;
   align-items: center;
 
-  grid-template-columns: 20px 3.5fr repeat(3, 1fr);
+  grid-template-columns: 20px 3.5fr repeat(5, 1.5fr);
 
   @media screen and (max-width: 900px) {
     grid-template-columns: 20px 1.5fr repeat(2, 1fr);
@@ -61,8 +61,10 @@ const LinkWrapper = styled(Link)`
 const SORT_FIELD = {
   feeTier: 'feeTier',
   volumeUSD: 'volumeUSD',
+  feeUSD: 'feeUSD',
   tvlUSD: 'tvlUSD',
-  volumeUSDWeek: 'volumeUSDWeek',
+  voltvl: 'voltvl',
+  volLiq: 'volLiq',
 }
 
 const DataRow = ({ poolData, index }: { poolData: PoolData; index: number }) => {
@@ -84,20 +86,26 @@ const DataRow = ({ poolData, index }: { poolData: PoolData; index: number }) => 
           </RowFixed>
         </Label>
         <Label end={1} fontWeight={400}>
-          {formatDollarAmount(poolData.tvlUSD)}
-        </Label>
-        <Label end={1} fontWeight={400}>
           {formatDollarAmount(poolData.volumeUSD)}
         </Label>
         <Label end={1} fontWeight={400}>
-          {formatDollarAmount(poolData.volumeUSDWeek)}
+          {formatDollarAmount(poolData.tvlUSD)}
+        </Label>
+        <Label end={1} fontWeight={400}>
+          {formatDollarAmount(poolData.feeUSD)}
+        </Label>
+        <Label end={1} fontWeight={400}>
+          {formatAmount(poolData.voltvl * 365 * 100, 0)}%
+        </Label>
+        <Label end={1} fontWeight={400}>
+          {formatAmount((poolData.volLiq * 100) / 0.05)}% {/* 0.05 = annualized volatility */}
         </Label>
       </ResponsiveGrid>
     </LinkWrapper>
   )
 }
 
-const MAX_ITEMS = 10
+const MAX_ITEMS = 20
 
 export default function PoolTable({ poolDatas, maxItems = MAX_ITEMS }: { poolDatas: PoolData[]; maxItems?: number }) {
   // theming
@@ -163,14 +171,20 @@ export default function PoolTable({ poolDatas, maxItems = MAX_ITEMS }: { poolDat
             <ClickableText color={theme.text2} onClick={() => handleSort(SORT_FIELD.feeTier)}>
               Pool {arrow(SORT_FIELD.feeTier)}
             </ClickableText>
+            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volumeUSD)}>
+              24h Volume {arrow(SORT_FIELD.volumeUSD)}
+            </ClickableText>
             <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.tvlUSD)}>
               TVL {arrow(SORT_FIELD.tvlUSD)}
             </ClickableText>
-            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volumeUSD)}>
-              Volume 24H {arrow(SORT_FIELD.volumeUSD)}
+            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.feeUSD)}>
+              24h Fees {arrow(SORT_FIELD.volumeUSD)}
             </ClickableText>
-            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volumeUSDWeek)}>
-              Volume 7D {arrow(SORT_FIELD.volumeUSDWeek)}
+            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.voltvl)}>
+              Pool APY {arrow(SORT_FIELD.voltvl)}
+            </ClickableText>
+            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volLiq)}>
+              LP returns/√day {arrow(SORT_FIELD.tvlUSD)}
             </ClickableText>
           </ResponsiveGrid>
           <Break />

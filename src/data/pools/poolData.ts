@@ -195,6 +195,28 @@ export function usePoolDatas(
 
     const feeTier = current ? parseInt(current.feeTier) : 0
 
+    const decs0 = current ? parseFloat(current.token0.decimals) : 0
+    const decs1 = current ? parseFloat(current.token1.decimals) : 0
+
+    const d0 = current ? parseFloat(current.token0.derivedETH) : 1
+    const d1 = current ? parseFloat(current.token1.derivedETH) : 1
+
+    const tick = current ? parseFloat(current.tick) : 0
+
+    const liquidity = current ? parseFloat(current.liquidity) : 0
+
+    const tvl0ETH = current ? tvlToken0 * parseFloat(current.token0.derivedETH) : 1
+    const tvl1ETH = current ? tvlToken1 * parseFloat(current.token1.derivedETH) : 1
+
+    const feeUSD = (volumeUSD * feeTier) / 1000000
+
+    const tvlTickToken0 = ((liquidity + 1) * feeTier * d0) / (1.0001 ** (tick / 2) * 10 ** (decs0 + 6))
+    const tvlTickToken1 = ((liquidity + 1) * feeTier * d1 * 1.0001 ** (tick / 2)) / 10 ** (decs1 + 6)
+    const tvlTickAvg = (tvlTickToken1 + tvlTickToken0) / 2
+
+    const voltvl = (feeTier * volumeUSD) / (tvlUSD * 1000000)
+    const volLiq = (voltvl * (tvl0ETH + tvl1ETH) * feeTier * 1.5957) / (20001 * 50 * tvlTickAvg)
+
     if (current) {
       accum[address] = {
         address,
@@ -221,10 +243,16 @@ export function usePoolDatas(
         volumeUSD,
         volumeUSDChange,
         volumeUSDWeek,
+        feeUSD,
         tvlUSD,
         tvlUSDChange,
+        volLiq,
+        voltvl,
         tvlToken0,
         tvlToken1,
+	tvlTickAvg,
+	tvlTickToken0,
+	tvlTickToken1,
       }
     }
 

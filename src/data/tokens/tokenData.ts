@@ -173,6 +173,7 @@ export function useFetchedTokenDatas(
     const tvlUSD = current ? parseFloat(current.totalValueLockedUSD) : 0
     const tvlUSDChange = getPercentChange(current?.totalValueLockedUSD, oneDay?.totalValueLockedUSD)
     const tvlToken = current ? parseFloat(current.totalValueLocked) : 0
+    const voltvl = volumeUSD / tvlUSD
     const priceUSD = current ? parseFloat(current.derivedETH) * ethPrices.current : 0
     const priceUSDOneDay = oneDay ? parseFloat(oneDay.derivedETH) * ethPrices.oneDay : 0
     const priceUSDWeek = week ? parseFloat(week.derivedETH) * ethPrices.week : 0
@@ -206,6 +207,7 @@ export function useFetchedTokenDatas(
       feesUSD,
       tvlUSDChange,
       tvlToken,
+      voltvl,    
       priceUSD,
       priceUSDChange,
       priceUSDChangeWeek,

@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 import { AutoColumn } from 'components/Column'
 import CurrencyLogo from 'components/CurrencyLogo'
 import { RowFixed } from 'components/Row'
-import { formatDollarAmount } from 'utils/numbers'
+import { formatDollarAmount, formatAmount } from 'utils/numbers'
 import Percent from 'components/Percent'
 import { Label, ClickableText } from '../Text'
 import { PageButtons, Arrow, Break } from 'components/shared'
@@ -93,13 +93,13 @@ const DataRow = ({ tokenData, index }: { tokenData: TokenData; index: number }) 
           {formatDollarAmount(tokenData.priceUSD)}
         </Label>
         <Label end={1} fontWeight={400}>
-          <Percent value={tokenData.priceUSDChange} fontWeight={400} />
-        </Label>
-        <Label end={1} fontWeight={400}>
           {formatDollarAmount(tokenData.volumeUSD)}
         </Label>
         <Label end={1} fontWeight={400}>
           {formatDollarAmount(tokenData.tvlUSD)}
+        </Label>
+        <Label end={1} fontWeight={400}>
+	  {formatAmount(tokenData.voltvl * 100, 0)}%
         </Label>
       </ResponsiveGrid>
     </LinkWrapper>
@@ -110,6 +110,7 @@ const SORT_FIELD = {
   name: 'name',
   volumeUSD: 'volumeUSD',
   tvlUSD: 'tvlUSD',
+  voltvl: 'voltvl',
   priceUSD: 'priceUSD',
   priceUSDChange: 'priceUSDChange',
   priceUSDChangeWeek: 'priceUSDChangeWeek',
@@ -192,9 +193,6 @@ export default function TokenTable({
             <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.priceUSD)}>
               Price {arrow(SORT_FIELD.priceUSD)}
             </ClickableText>
-            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.priceUSDChange)}>
-              Price Change {arrow(SORT_FIELD.priceUSDChange)}
-            </ClickableText>
             {/* <ClickableText end={1} onClick={() => handleSort(SORT_FIELD.priceUSDChangeWeek)}>
             7d {arrow(SORT_FIELD.priceUSDChangeWeek)}
           </ClickableText> */}
@@ -203,6 +201,9 @@ export default function TokenTable({
             </ClickableText>
             <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.tvlUSD)}>
               TVL {arrow(SORT_FIELD.tvlUSD)}
+            </ClickableText>
+            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.voltvl)}>
+              Vol/TVL {arrow(SORT_FIELD.voltvl)}
             </ClickableText>
           </ResponsiveGrid>
 

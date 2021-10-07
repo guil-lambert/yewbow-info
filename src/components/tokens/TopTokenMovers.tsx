@@ -7,7 +7,7 @@ import { AutoColumn } from 'components/Column'
 import { RowFixed, RowFlat } from 'components/Row'
 import CurrencyLogo from 'components/CurrencyLogo'
 import { TYPE, StyledInternalLink } from 'theme'
-import { formatDollarAmount } from 'utils/numbers'
+import { formatDollarAmount, formatAmount } from 'utils/numbers'
 import Percent from 'components/Percent'
 import HoverInlineText from 'components/HoverInlineText'
 
@@ -47,9 +47,8 @@ const DataCard = ({ tokenData }: { tokenData: TokenData }) => {
             </TYPE.label>
             <RowFlat>
               <TYPE.label fontSize="14px" mr="6px" lineHeight="16px">
-                {formatDollarAmount(tokenData.priceUSD)}
+                {formatAmount(tokenData.voltvl * 100)}%
               </TYPE.label>
-              <Percent fontSize="14px" value={tokenData.priceUSDChange} />
             </RowFlat>
           </AutoColumn>
         </RowFixed>
@@ -64,7 +63,7 @@ export default function TopTokenMovers() {
   const topPriceIncrease = useMemo(() => {
     return Object.values(allTokens)
       .sort(({ data: a }, { data: b }) => {
-        return a && b ? (Math.abs(a?.priceUSDChange) > Math.abs(b?.priceUSDChange) ? -1 : 1) : -1
+        return a && b ? (Math.abs(a?.voltvl) > Math.abs(b?.voltvl) ? -1 : 1) : -1
       })
       .slice(0, Math.min(20, Object.values(allTokens).length))
   }, [allTokens])
