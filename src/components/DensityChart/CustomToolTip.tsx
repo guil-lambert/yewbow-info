@@ -28,7 +28,20 @@ export function CustomToolTip({ chartProps, poolData, currentPrice }: CustomTool
   const price1 = chartProps?.payload?.[0]?.payload.price1
   const tvlToken0 = chartProps?.payload?.[0]?.payload.tvlToken0
   const tvlToken1 = chartProps?.payload?.[0]?.payload.tvlToken1
+  
+  const tvl0ETH = poolData?.token0.derivedETH
+  const tvl1ETH = poolData?.token1.derivedETH
 
+  const voltvl = (poolData?.feeTier * poolData?.volumeUSD) / (poolData?.tvlUSD * 1000000)  
+
+  const decs0 = poolData ? (poolData?.token0.decimals) : 0
+  const decs1 = poolData ? (poolData?.token1.decimals) : 0
+
+  const tvlTick = (tvlToken0 * tvl0ETH + tvlToken1 * tvl1ETH) / 2 
+
+  const totalLockedETH = poolData ? tvl0ETH * poolData.tvlToken0 + tvl1ETH * poolData.tvlToken1 : 1
+
+  const LPret = (voltvl * totalLockedETH * poolData.feeTier * 1.5957 * 100) / (20001 * 50 * tvlTick * 0.05)	
   return (
     <TooltipWrapper>
       <AutoColumn gap="sm">
@@ -42,6 +55,12 @@ export function CustomToolTip({ chartProps, poolData, currentPrice }: CustomTool
                 })
               : ''}{' '}
             {poolData?.token1?.symbol}
+          </TYPE.label>
+        </RowBetween>
+        <RowBetween>
+          <TYPE.label>LP/√day: </TYPE.label>
+          <TYPE.label>
+	  {formatAmount(LPret)}%
           </TYPE.label>
         </RowBetween>
         <RowBetween>
