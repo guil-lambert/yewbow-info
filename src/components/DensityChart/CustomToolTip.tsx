@@ -46,6 +46,18 @@ export function CustomToolTip({ chartProps, poolData, currentPrice }: CustomTool
     <TooltipWrapper>
       <AutoColumn gap="sm">
         <TYPE.main color={theme.text3}>Tick stats</TYPE.main>
+       <RowBetween>
+          <TYPE.label>LP/√day: </TYPE.label>
+          <TYPE.label>
+	  {formatAmount(LPret)}%
+          </TYPE.label>
+        </RowBetween>
+        <RowBetween>
+          <TYPE.label>Value Locked: </TYPE.label>
+          <TYPE.label>
+	  {formatAmount(tvlTick)} ETH
+          </TYPE.label>
+        </RowBetween>
         <RowBetween>
           <TYPE.label>{poolData?.token0?.symbol} Price: </TYPE.label>
           <TYPE.label>
@@ -57,13 +69,7 @@ export function CustomToolTip({ chartProps, poolData, currentPrice }: CustomTool
             {poolData?.token1?.symbol}
           </TYPE.label>
         </RowBetween>
-        <RowBetween>
-          <TYPE.label>LP/√day: </TYPE.label>
-          <TYPE.label>
-	  {formatAmount(LPret)}%
-          </TYPE.label>
-        </RowBetween>
-        <RowBetween>
+         <RowBetween>
           <TYPE.label>{poolData?.token1?.symbol} Price: </TYPE.label>
           <TYPE.label>
             {price1
@@ -74,21 +80,6 @@ export function CustomToolTip({ chartProps, poolData, currentPrice }: CustomTool
             {poolData?.token0?.symbol}
           </TYPE.label>
         </RowBetween>
-        {currentPrice && price0 && currentPrice > price1 ? (
-          <RowBetween>
-            <TYPE.label>{poolData?.token0?.symbol} Locked: </TYPE.label>
-            <TYPE.label>
-              {tvlToken0 ? formatAmount(tvlToken0) : ''} {poolData?.token0?.symbol}
-            </TYPE.label>
-          </RowBetween>
-        ) : (
-          <RowBetween>
-            <TYPE.label>{poolData?.token1?.symbol} Locked: </TYPE.label>
-            <TYPE.label>
-              {tvlToken1 ? formatAmount(tvlToken1) : ''} {poolData?.token1?.symbol}
-            </TYPE.label>
-          </RowBetween>
-        )}
       </AutoColumn>
     </TooltipWrapper>
   )
