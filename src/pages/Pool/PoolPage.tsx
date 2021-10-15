@@ -250,6 +250,12 @@ export default function PoolPage({
                     {formatDollarAmount(poolData.volumeUSD * (poolData.feeTier / 1000000))}
                   </TYPE.label>
                 </AutoColumn>
+                <AutoColumn gap="4px">
+                  <TYPE.main fontWeight={400}>Pool APY</TYPE.main>
+                  <TYPE.label fontSize="24px">
+                     {formatAmount(poolData.voltvl * 365 * 100, 0)}%
+                  </TYPE.label>
+                </AutoColumn>
               </AutoColumn>
             </DarkGreyCard>
             <DarkGreyCard>
