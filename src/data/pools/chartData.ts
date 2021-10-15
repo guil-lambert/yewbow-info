@@ -24,6 +24,7 @@ const POOL_CHART = gql`
       volumeUSD
       tvlUSD
       feesUSD
+      txCount
     }
   }
 `
@@ -34,6 +35,7 @@ interface ChartResults {
     volumeUSD: string
     tvlUSD: string
     feesUSD: string
+    txCount: string
   }[]
 }
 
@@ -43,6 +45,7 @@ export async function fetchPoolChartData(address: string, client: ApolloClient<N
     volumeUSD: string
     tvlUSD: string
     feesUSD: string
+    txCount: string	  
   }[] = []
   const startTimestamp = 1619170975
   const endTimestamp = dayjs.utc().unix()
@@ -84,6 +87,7 @@ export async function fetchPoolChartData(address: string, client: ApolloClient<N
         volumeUSD: parseFloat(dayData.volumeUSD),
         totalValueLockedUSD: parseFloat(dayData.tvlUSD),
         feesUSD: parseFloat(dayData.feesUSD),
+        txCount: parseFloat(dayData.txCount),
       }
       return accum
     }, {})
@@ -102,6 +106,7 @@ export async function fetchPoolChartData(address: string, client: ApolloClient<N
           volumeUSD: 0,
           totalValueLockedUSD: latestTvl,
           feesUSD: 0,
+          txCount: 0,
         }
       } else {
         latestTvl = formattedExisting[currentDayIndex].totalValueLockedUSD

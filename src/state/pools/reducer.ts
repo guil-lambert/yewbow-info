@@ -77,6 +77,7 @@ export type PoolChartEntry = {
   volumeUSD: number
   totalValueLockedUSD: number
   feesUSD: number
+  txCount: number
 }
 
 export interface PoolsState {

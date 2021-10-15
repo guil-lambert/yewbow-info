@@ -66,6 +66,7 @@ enum ChartView {
   PRICE,
   DENSITY,
   ROL,
+  TXSIZE,
 }
 
 export default function PoolPage({
@@ -124,6 +125,19 @@ export default function PoolPage({
         return {
           time: unixToDate(day.date),
           value: day.feesUSD / day.totalValueLockedUSD,
+        }
+      })
+    } else {
+      return []
+    }
+  }, [chartData])
+  
+  const formattedTxSizeData = useMemo(() => {
+    if (chartData) {
+      return chartData.map((day) => {
+        return {
+          time: unixToDate(day.date),
+          value: day.volumeUSD / day.txCount,
         }
       })
     } else {
@@ -280,7 +294,11 @@ export default function PoolPage({
                       {latestValue
                         ? view === ChartView.ROL
                           ? formatPercentAmount(latestValue)
+			: view === ChartView.TXSIZE
+                          ? formatDollarAmount(latestValue)
                           : formatDollarAmount(latestValue)
+                        : view === ChartView.TXSIZE
+                        ? formatAmount(formattedTxSizeData[formattedTxSizeData.length - 1]?.value)
                         : view === ChartView.VOL
                         ? formatDollarAmount(formattedVolumeData[formattedVolumeData.length - 1]?.value)
                         : view === ChartView.ROL
@@ -294,7 +312,7 @@ export default function PoolPage({
                     {valueLabel ? <MonoSpace>{valueLabel} (UTC)</MonoSpace> : ''}
                   </TYPE.main>
                 </AutoColumn>
-                <ToggleWrapper width="250px">
+                <ToggleWrapper width="350px">
                   <ToggleElementFree
                     isActive={view === ChartView.VOL}
                     fontSize="12px"
@@ -315,6 +333,13 @@ export default function PoolPage({
                     onClick={() => (view === ChartView.ROL ? setView(ChartView.DENSITY) : setView(ChartView.ROL))}
                   >
                     ROL
+                  </ToggleElementFree>
+                  <ToggleElementFree
+                    isActive={view === ChartView.TXSIZE}
+                    fontSize="12px"
+                    onClick={() => (view === ChartView.TXSIZE ? setView(ChartView.DENSITY) : setView(ChartView.TXSIZE))}
+                  >
+                    avgTxnSize
                   </ToggleElementFree>
                   <ToggleElementFree
                     isActive={view === ChartView.DENSITY}
@@ -338,6 +363,16 @@ export default function PoolPage({
               ) : view === ChartView.VOL ? (
                 <BarChart
                   data={formattedVolumeData}
+                  color={backgroundColor}
+                  minHeight={340}
+                  setValue={setLatestValue}
+                  setLabel={setValueLabel}
+                  value={latestValue}
+                  label={valueLabel}
+                />
+              ) : view === ChartView.TXSIZE ? (
+                <LineChart
+                  data={formattedTxSizeData}
                   color={backgroundColor}
                   minHeight={340}
                   setValue={setLatestValue}
