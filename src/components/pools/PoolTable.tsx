@@ -26,7 +26,7 @@ const ResponsiveGrid = styled.div`
   grid-gap: 1em;
   align-items: center;
 
-  grid-template-columns: 20px 3.5fr repeat(5, 1.5fr);
+  grid-template-columns: 20px 3.5fr repeat(6, 1.5fr);
 
   @media screen and (max-width: 900px) {
     grid-template-columns: 20px 1.5fr repeat(2, 1fr);
@@ -65,6 +65,7 @@ const SORT_FIELD = {
   tvlUSD: 'tvlUSD',
   voltvl: 'voltvl',
   volLiq: 'volLiq',
+  holdRatio: 'holdRatio',
 }
 
 const DataRow = ({ poolData, index }: { poolData: PoolData; index: number }) => {
@@ -93,6 +94,9 @@ const DataRow = ({ poolData, index }: { poolData: PoolData; index: number }) => 
         </Label>
         <Label end={1} fontWeight={400}>
           {formatDollarAmount(poolData.feeUSD)}
+        </Label>
+        <Label end={1} fontWeight={400}>
+          {formatAmount(poolData.holdRatio)}
         </Label>
         <Label end={1} fontWeight={400}>
           {formatAmount(poolData.voltvl * 365 * 100, 0)}%
@@ -179,6 +183,9 @@ export default function PoolTable({ poolDatas, maxItems = MAX_ITEMS }: { poolDat
             </ClickableText>
             <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.feeUSD)}>
               24h Fees {arrow(SORT_FIELD.volumeUSD)}
+            </ClickableText>
+            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volLiq)}>
+              Hold {'if >'}1 {arrow(SORT_FIELD.holdRatio)}
             </ClickableText>
             <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.voltvl)}>
               Pool APY {arrow(SORT_FIELD.voltvl)}

@@ -42,6 +42,10 @@ export function CustomToolTip({ chartProps, poolData, currentPrice }: CustomTool
   const totalLockedETH = poolData ? tvl0ETH * poolData.tvlToken0 + tvl1ETH * poolData.tvlToken1 : 1
 
   const LPret = (voltvl * totalLockedETH * poolData.feeTier * 1.5957 * 100) / (20001 * 50 * tvlTick * 0.05)	
+  
+  const holdRatio = poolData?.volumeUSD / (tvlTick * poolData?.tvlUSD / totalLockedETH)
+
+
   return (
     <TooltipWrapper>
       <AutoColumn gap="sm">
@@ -50,6 +54,12 @@ export function CustomToolTip({ chartProps, poolData, currentPrice }: CustomTool
           <TYPE.label>LP/√day: </TYPE.label>
           <TYPE.label>
 	  {formatAmount(LPret)}%
+          </TYPE.label>
+        </RowBetween>
+       <RowBetween>
+          <TYPE.label>Hold ratio: </TYPE.label>
+          <TYPE.label>
+	  {formatAmount(holdRatio)}
           </TYPE.label>
         </RowBetween>
         <RowBetween>

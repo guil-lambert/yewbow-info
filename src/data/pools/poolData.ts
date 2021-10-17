@@ -216,7 +216,8 @@ export function usePoolDatas(
 
     const tvl0ETH = current ? tvlToken0 * parseFloat(current.token0.derivedETH) : 1
     const tvl1ETH = current ? tvlToken1 * parseFloat(current.token1.derivedETH) : 1
-
+    const totalLockedETH =current ? tvl0ETH * tvlToken0 + tvl1ETH * tvlToken1 : 1
+   
     const feeUSD = (volumeUSD * feeTier) / 1000000
 
     const tvlTickToken0 = ((liquidity + 1) * feeTier * d0) / (1.0001 ** (tick / 2) * 10 ** (decs0 + 6))
@@ -225,7 +226,10 @@ export function usePoolDatas(
 
     const voltvl = (feeTier * volumeUSD) / (tvlUSD * 1000000)
     const volLiq = (voltvl * (tvl0ETH + tvl1ETH) * feeTier * 1.5957) / (20001 * 50 * tvlTickAvg)
-
+    
+    //const holdRatio = volumeUSD / (tvlTickAvg * tvlUSD / (tvl0ETH + tvl1ETH))
+    const holdRatio = volumeUSD * 365 * 4 * feeTier**2 / (10 ** 12 * tvlTickAvg * tvlUSD / (tvl0ETH + tvl1ETH))
+    
     if (current) {
       accum[address] = {
         address,
@@ -257,6 +261,7 @@ export function usePoolDatas(
         tvlUSDChange,
         volLiq,
         voltvl,
+	holdRatio,      
         tvlToken0,
         tvlToken1,
 	feesUSD,
