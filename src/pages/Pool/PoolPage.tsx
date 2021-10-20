@@ -328,18 +328,18 @@ export default function PoolPage({
                     TVL
                   </ToggleElementFree>
                   <ToggleElementFree
-                    isActive={view === ChartView.ROL}
-                    fontSize="12px"
-                    onClick={() => (view === ChartView.ROL ? setView(ChartView.DENSITY) : setView(ChartView.ROL))}
-                  >
-                    ROL
-                  </ToggleElementFree>
-                  <ToggleElementFree
                     isActive={view === ChartView.TXSIZE}
                     fontSize="12px"
                     onClick={() => (view === ChartView.TXSIZE ? setView(ChartView.DENSITY) : setView(ChartView.TXSIZE))}
                   >
                     avgTxnSize
+                  </ToggleElementFree>
+                  <ToggleElementFree
+                    isActive={view === ChartView.ROL}
+                    fontSize="12px"
+                    onClick={() => (view === ChartView.ROL ? setView(ChartView.DENSITY) : setView(ChartView.ROL))}
+                  >
+                    ROL
                   </ToggleElementFree>
                   <ToggleElementFree
                     isActive={view === ChartView.DENSITY}
