@@ -27,7 +27,7 @@ const Container = styled.div`
 `
 
 const Wrapper = styled(Row)`
-  background-color: ${({ theme }) => theme.bg0};
+  background-color: ${({ theme }) => theme.bg1};
   padding: 10px 16px;
   width: 500px;
   height: 38px;
@@ -45,7 +45,7 @@ const StyledInput = styled.input`
   display: flex;
   align-items: center;
   white-space: nowrap;
-  background: ${({ theme }) => theme.bg0};
+  background: ${({ theme }) => theme.bg1};
   border: none;
   width: 100%;
   font-size: 16px;
@@ -81,7 +81,7 @@ const Menu = styled.div<{ hide: boolean }>`
   box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04),
     0px 24px 32px rgba(0, 0, 0, 0.04);
   display: ${({ hide }) => hide && 'none'};
-  border: 1px solid ${({ theme }) => theme.pink1};
+  border: 1px solid ${({ theme }) => theme.blue1};
 
   ${({ theme }) => theme.mediaWidth.upToMedium`
     position: absolute;
