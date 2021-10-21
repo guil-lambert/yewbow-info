@@ -33,13 +33,15 @@ const mediaWidthTemplates: { [width in keyof typeof MEDIA_WIDTHS]: typeof css } 
 const white = '#FFFFFF'
 const black = '#000000'
 
+const hue = '215'
+
 export function colors(darkMode: boolean): Colors {
   return {
     // base
     white,
     black,
 
-    // text
+    // text hsl(h, s%, l%)
     text1: darkMode ? '#FFFFFF' : '#000000',
     text2: darkMode ? '#C3C5CB' : '#565A69',
     text3: darkMode ? '#6C7284' : '#888D9B',
@@ -59,31 +61,31 @@ export function colors(darkMode: boolean): Colors {
     advancedBG: darkMode ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.6)',
 
     //primary colors
-    primary1: darkMode ? '#2172E5' : '#ff007a',
-    primary2: darkMode ? '#3680E7' : '#FF8CC3',
-    primary3: darkMode ? '#4D8FEA' : '#FF99C9',
-    primary4: darkMode ? '#376bad70' : '#F6DDE8',
-    primary5: darkMode ? '#153d6f70' : '#FDEAF1',
+    primary1: darkMode ? 'hsl(215, 79%, 51%)' : 'hsl(331, 100%, 50%)',
+    primary2: darkMode ? 'hsl(215, 79%, 56%)' : 'hsl(331, 100%, 77%)',
+    primary3: darkMode ? 'hsl(215, 79%, 61%)' : 'hsl(331, 100%, 80%)',
+    primary4: darkMode ? 'hsla(215, 79%, 61%, 70%)' : 'hsl(331, 58%, 92%)',
+    primary5: darkMode ? 'hsla(215, 68%, 26%, 70%)' : 'hsl(331, 83%, 95%)',
 
     // color text
-    primaryText1: darkMode ? '#6da8ff' : '#ff007a',
+    primaryText1: darkMode ? 'hsl(215, 100%, 71%)' : 'hsl(331, 100%, 50%)',
 
     // secondary colors
-    secondary1: darkMode ? '#2172E5' : '#ff007a',
-    secondary2: darkMode ? '#17000b26' : '#F6DDE8',
-    secondary3: darkMode ? '#17000b26' : '#FDEAF1',
+    secondary1: darkMode ? 'hsl(215, 79%, 51%)' : 'hsl(331, 100%, 50%)',
+    secondary2: darkMode ? 'hsla(331, 100%, 5%, 26%)' : 'hsl(331, 58%, 92%)',
+    secondary3: darkMode ? 'hsla(331, 100%, 5%, 26%)' : 'hsl(331, 83%, 95%)',
 
     // other
-    pink1: '#ff007a',
-    red1: '#FD4040',
-    red2: '#F82D3A',
-    red3: '#D60000',
-    green1: '#27AE60',
-    yellow1: '#FFE270',
-    yellow2: '#F3841E',
-    yellow3: '#F3B71E',
-    blue1: '#2172E5',
-    blue2: '#5199FF',
+    pink1: 'hsl(331, 100%, 50%)',
+    red1: 'hsl(0, 98%, 62%)',
+    red2: 'hsl(356, 94%, 57%)',
+    red3: 'hsl(0, 100%, 42%)',
+    green1: 'hsl(145, 63%, 42%)',
+    yellow1: 'hsl(48, 100%, 72%)',
+    yellow2: 'hsl(29, 90%, 54%)',
+    yellow3: 'hsl(43, 90%, 54%)',
+    blue1: 'hsl(215, 79%, 51%)',
+    blue2: 'hsl(215, 100%, 66%)',
 
     // dont wanna forget these blue yet
     // blue4: darkMode ? '#153d6f70' : '#C4D9F8',
