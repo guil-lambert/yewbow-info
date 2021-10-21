@@ -17,9 +17,10 @@ const Container = styled.div`
 
 const Wrapper = styled.div`
   border-radius: 12px;
-  background-color: ${({ theme }) => theme.bg1};
+  background-color: ${({ theme }) => theme.bg3};
   padding: 6px 8px;
   margin-right: 12px;
+  color: ${({ theme }) => theme.text3};
 
   :hover {
     cursor: pointer;
@@ -41,18 +42,19 @@ const LogoWrapper = styled.img`
 `
 
 const FlyOut = styled.div`
-  background-color: ${({ theme }) => theme.bg1};
+  background-color: ${({ theme }) => theme.bg3};
   position: absolute;
   top: 40px;
   left: 0;
   border-radius: 12px;
   padding: 16px;
+  color: ${({ theme }) => theme.text3};
   width: 270px;
 `
 
 const NetworkRow = styled(RowBetween)<{ active?: boolean; disabled?: boolean }>`
   padding: 6px 8px;
-  background-color: ${({ theme, active }) => (active ? theme.bg2 : theme.bg1)};
+  background-color: ${({ theme, active }) => (active ? theme.bg4 : theme.bg3)};
   border-radius: 8px;
   opacity: ${({ disabled }) => (disabled ? '0.5' : 1)};
   :hover {
@@ -62,7 +64,7 @@ const NetworkRow = styled(RowBetween)<{ active?: boolean; disabled?: boolean }>`
 `
 
 const Badge = styled.div<{ bgColor?: string }>`
-  background-color: ${({ theme, bgColor }) => bgColor ?? theme.bg4};
+  background-color: ${({ theme, bgColor }) => bgColor ?? theme.bg1};
   border-radius: 6px;
   padding: 2px 6px;
   font-size: 12px;
@@ -95,7 +97,7 @@ export default function NetworkDropdown() {
       <Wrapper onClick={() => setShowMenu(!showMenu)}>
         <RowFixed>
           <LogoWrapper src={activeNetwork.imageURL} />
-          <TYPE.main fontSize="14px" color={theme.white} ml="8px" mt="-2px" mr="2px" style={{ whiteSpace: 'nowrap' }}>
+          <TYPE.main fontSize="14px" color={theme.text1} ml="8px" mt="-2px" mr="2px" style={{ whiteSpace: 'nowrap' }}>
             {activeNetwork.name}
           </TYPE.main>
           {activeNetwork === EthereumNetworkInfo ? null : (
@@ -126,7 +128,7 @@ export default function NetworkDropdown() {
                         <LogoWrapper src={n.imageURL} />
                         {activeNetwork.id === n.id && <GreenDot />}
                       </LogaContainer>
-                      <TYPE.main ml="12px" color={theme.white}>
+                      <TYPE.main ml="12px" color={theme.text1}>
                         {n.name}
                       </TYPE.main>
                     </RowFixed>

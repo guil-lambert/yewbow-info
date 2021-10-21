@@ -8,7 +8,7 @@ import Polling from './Polling'
 
 const Wrapper = styled.div`
   width: 100%;
-  background-color: ${({ theme }) => theme.black};
+  background-color: ${({ theme }) => theme.bg0};
   padding: 10px 20px;
 `
 
@@ -36,7 +36,6 @@ const TopBar = () => {
           </RowFixed>
         </AutoRow>
         <AutoRow gap="6px" style={{ justifyContent: 'flex-end' }}>
-          <StyledLink href="https://v2.info.uniswap.org/#/">V2 Analytics</StyledLink>
           <StyledLink href="https://docs.uniswap.org/">Docs</StyledLink>
           <StyledLink href="https://app.uniswap.org/#/swap">App</StyledLink>
         </AutoRow>

@@ -27,7 +27,7 @@ const Container = styled.div`
 `
 
 const Wrapper = styled(Row)`
-  background-color: ${({ theme }) => theme.black};
+  background-color: ${({ theme }) => theme.bg0};
   padding: 10px 16px;
   width: 500px;
   height: 38px;
@@ -45,7 +45,7 @@ const StyledInput = styled.input`
   display: flex;
   align-items: center;
   white-space: nowrap;
-  background: none;
+  background: ${({ theme }) => theme.bg0};
   border: none;
   width: 100%;
   font-size: 16px;
