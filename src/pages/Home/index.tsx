@@ -20,10 +20,11 @@ import PoolTable from 'components/pools/PoolTable'
 import { PageWrapper, ThemedBackgroundGlobal } from 'pages/styled'
 import { unixToDate } from 'utils/date'
 import BarChart from 'components/BarChart/alt'
-import { useAllPoolData } from 'state/pools/hooks'
+import { useAllPoolData, usePoolDatas } from 'state/pools/hooks'
 import { notEmpty } from 'utils'
 import TransactionsTable from '../../components/TransactionsTable'
 import { useAllTokenData } from 'state/tokens/hooks'
+import { useSavedPools } from 'state/user/hooks'
 import { MonoSpace } from 'components/shared'
 import { useActiveNetworkVersion } from 'state/application/hooks'
 
@@ -114,60 +115,24 @@ export default function Home() {
       .filter(notEmpty)
   }, [allTokens])
 
+  const [savedPools] = useSavedPools()
+  const watchlistPools = usePoolDatas(savedPools)
+	
   return (
     <PageWrapper>
       <ThemedBackgroundGlobal backgroundColor={activeNetwork.bgColor} />
       <AutoColumn gap="16px">
-        <TYPE.main>Uniswap Overview</TYPE.main>
-        <ResponsiveRow>
-          <ChartWrapper>
-            <LineChart
-              data={formattedTvlData}
-              height={220}
-              minHeight={332}
-              color={activeNetwork.primaryColor}
-              value={liquidityHover}
-              label={leftLabel}
-              setValue={setLiquidityHover}
-              setLabel={setLeftLabel}
-              topLeft={
-                <AutoColumn gap="4px">
-                  <TYPE.mediumHeader fontSize="16px">TVL</TYPE.mediumHeader>
-                  <TYPE.largeHeader fontSize="32px">
-                    <MonoSpace>{formatDollarAmount(liquidityHover, 2, true)} </MonoSpace>
-                  </TYPE.largeHeader>
-                  <TYPE.main fontSize="12px" height="14px">
-                    {leftLabel ? <MonoSpace>{leftLabel} (UTC)</MonoSpace> : null}
-                  </TYPE.main>
-                </AutoColumn>
-              }
-            />
-          </ChartWrapper>
-          <ChartWrapper>
-            <BarChart
-              height={220}
-              minHeight={332}
-              data={formattedVolumeData}
-              color={theme.blue1}
-              setValue={setVolumeHover}
-              setLabel={setRightLabel}
-              value={volumeHover}
-              label={rightLabel}
-              topLeft={
-                <AutoColumn gap="4px">
-                  <TYPE.mediumHeader fontSize="16px">Volume 24H</TYPE.mediumHeader>
-                  <TYPE.largeHeader fontSize="32px">
-                    <MonoSpace> {formatDollarAmount(volumeHover, 2)}</MonoSpace>
-                  </TYPE.largeHeader>
-                  <TYPE.main fontSize="12px" height="14px">
-                    {rightLabel ? <MonoSpace>{rightLabel} (UTC)</MonoSpace> : null}
-                  </TYPE.main>
-                </AutoColumn>
-              }
-            />
-          </ChartWrapper>
-        </ResponsiveRow>
-        <HideSmall>
+      <AutoColumn gap="lg">
+        <TYPE.main>Your Watchlist</TYPE.main>
+        {watchlistPools.length > 0 ? (
+          <PoolTable poolDatas={watchlistPools} />
+        ) : (
+          <DarkGreyCard>
+            <TYPE.main>Saved pools will appear here</TYPE.main>
+          </DarkGreyCard>
+        )}
+      </AutoColumn>
+      <HideSmall>
           <DarkGreyCard>
             <RowBetween>
               <RowFixed>
