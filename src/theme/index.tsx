@@ -83,7 +83,7 @@ export function colors(darkMode: boolean): Colors {
     green1: 'hsl(145, 63%, 42%)',
     yellow1: 'hsl(48, 100%, 72%)',
     yellow2: 'hsl(29, 90%, 54%)',
-    yellow3: 'hsl(43, 90%, 54%)',
+    yellow3: 'hsl(205, 99%, 99%)',
     blue1: 'hsl(215, 79%, 51%)',
     blue2: 'hsl(215, 100%, 66%)',
 
@@ -227,7 +227,7 @@ html {
 export const ThemedGlobalStyle = createGlobalStyle`
 html {
   color: ${({ theme }) => theme.text1};
-  background-color: ${({ theme }) => theme.bg1};
+  background-color: ${({ theme }) => theme.yellow3};
 }
 
 .three-line-legend-dark {
