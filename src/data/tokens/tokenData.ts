@@ -207,7 +207,7 @@ export function useFetchedTokenDatas(
       feesUSD,
       tvlUSDChange,
       tvlToken,
-      voltvl,    
+      voltvl,
       priceUSD,
       priceUSDChange,
       priceUSDChangeWeek,

@@ -42,7 +42,9 @@ const DataCard = ({ poolData }: { poolData: PoolData }) => {
             </GreyBadge>
           </RowFixed>
           <RowFixed>
-            <TYPE.label mr="6px">{formatAmount((poolData.volLiq * 100) / 0.05)}% | APY: {formatAmount(poolData.voltvl * 365 * 100)}%</TYPE.label>
+            <TYPE.label mr="6px">
+              {formatAmount((poolData.volLiq * 100) / 0.05)}% | APY: {formatAmount(poolData.voltvl * 365 * 100)}%
+            </TYPE.label>
           </RowFixed>
         </AutoColumn>
       </Wrapper>

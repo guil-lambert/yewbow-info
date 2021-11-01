@@ -117,22 +117,22 @@ export default function Home() {
 
   const [savedPools] = useSavedPools()
   const watchlistPools = usePoolDatas(savedPools)
-	
+
   return (
     <PageWrapper>
       <ThemedBackgroundGlobal backgroundColor={activeNetwork.bgColor} />
       <AutoColumn gap="16px">
-      <AutoColumn gap="lg">
-        <TYPE.main>Your Watchlist</TYPE.main>
-        {watchlistPools.length > 0 ? (
-          <PoolTable poolDatas={watchlistPools} />
-        ) : (
-          <DarkGreyCard>
-            <TYPE.main>Saved pools will appear here</TYPE.main>
-          </DarkGreyCard>
-        )}
-      </AutoColumn>
-      <HideSmall>
+        <AutoColumn gap="lg">
+          <TYPE.main>Your Watchlist</TYPE.main>
+          {watchlistPools.length > 0 ? (
+            <PoolTable poolDatas={watchlistPools} />
+          ) : (
+            <DarkGreyCard>
+              <TYPE.main>Saved pools will appear here</TYPE.main>
+            </DarkGreyCard>
+          )}
+        </AutoColumn>
+        <HideSmall>
           <DarkGreyCard>
             <RowBetween>
               <RowFixed>

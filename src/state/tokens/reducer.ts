@@ -33,7 +33,7 @@ export type TokenData = {
   tvlToken: number
   tvlUSD: number
   tvlUSDChange: number
-  
+
   // liquidity/TVL
   voltvl: number
 

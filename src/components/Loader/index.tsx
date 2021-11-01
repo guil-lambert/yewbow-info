@@ -1,5 +1,5 @@
 import React from 'react'
-import v3 from '../../assets/images/whitev3.svg'
+import v3 from '../../assets/svg/logo.svg'
 import styled, { keyframes, css } from 'styled-components'
 
 const rotate = keyframes`
@@ -56,7 +56,7 @@ const Wrapper = styled.div<{ fill: number; height?: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme, fill }) => (fill ? 'black' : theme.bg0)};
+  background-color: ${({ theme, fill }) => (fill ? 'white' : theme.bg0)};
   height: 100%;
   width: 100%;
   ${(props) =>

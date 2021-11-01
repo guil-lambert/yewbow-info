@@ -45,7 +45,7 @@ export async function fetchPoolChartData(address: string, client: ApolloClient<N
     volumeUSD: string
     tvlUSD: string
     feesUSD: string
-    txCount: string	  
+    txCount: string
   }[] = []
   const startTimestamp = 1619170975
   const endTimestamp = dayjs.utc().unix()

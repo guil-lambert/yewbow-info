@@ -131,7 +131,7 @@ export default function PoolPage({
       return []
     }
   }, [chartData])
-  
+
   const formattedTxSizeData = useMemo(() => {
     if (chartData) {
       return chartData.map((day) => {
@@ -280,9 +280,7 @@ export default function PoolPage({
                 </AutoColumn>
                 <AutoColumn gap="4px">
                   <TYPE.main fontWeight={400}>Pool APY</TYPE.main>
-                  <TYPE.label fontSize="24px">
-                     {formatAmount(poolData.voltvl * 365 * 100, 0)}%
-                  </TYPE.label>
+                  <TYPE.label fontSize="24px">{formatAmount(poolData.voltvl * 365 * 100, 0)}%</TYPE.label>
                 </AutoColumn>
               </AutoColumn>
             </DarkGreyCard>
@@ -294,7 +292,7 @@ export default function PoolPage({
                       {latestValue
                         ? view === ChartView.ROL
                           ? formatPercentAmount(latestValue)
-			: view === ChartView.TXSIZE
+                          : view === ChartView.TXSIZE
                           ? formatDollarAmount(latestValue)
                           : formatDollarAmount(latestValue)
                         : view === ChartView.TXSIZE

@@ -99,7 +99,7 @@ const DataRow = ({ tokenData, index }: { tokenData: TokenData; index: number }) 
           {formatDollarAmount(tokenData.tvlUSD)}
         </Label>
         <Label end={1} fontWeight={400}>
-	  {formatAmount(tokenData.voltvl * 100, 0)}%
+          {formatAmount(tokenData.voltvl * 100, 0)}%
         </Label>
       </ResponsiveGrid>
     </LinkWrapper>
