@@ -5,7 +5,7 @@ import { useClients } from 'state/application/hooks'
 
 export const TOP_TOKENS = gql`
   query topPools {
-    tokens(first: 50, orderBy: totalValueLockedUSD, orderDirection: desc, subgraphError: allow) {
+    tokens(first: 500, orderBy: totalValueLockedUSD, orderDirection: desc, subgraphError: allow) {
       id
     }
   }
