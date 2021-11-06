@@ -182,7 +182,7 @@ export default function PoolTable({ poolDatas, maxItems = MAX_ITEMS }: { poolDat
               TVL {arrow(SORT_FIELD.tvlUSD)}
             </ClickableText>
             <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.feeUSD)}>
-              24h Fees {arrow(SORT_FIELD.volumeUSD)}
+              24h Fees {arrow(SORT_FIELD.feeUSD)}
             </ClickableText>
             <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volLiq)}>
               Hold {'if >'}1 {arrow(SORT_FIELD.holdRatio)}

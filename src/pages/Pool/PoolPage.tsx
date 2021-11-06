@@ -274,9 +274,7 @@ export default function PoolPage({
                 </AutoColumn>
                 <AutoColumn gap="4px">
                   <TYPE.main fontWeight={400}>24h Fees</TYPE.main>
-                  <TYPE.label fontSize="24px">
-                    {formatDollarAmount(poolData.volumeUSD * (poolData.feeTier / 1000000))}
-                  </TYPE.label>
+                  <TYPE.label fontSize="24px">{formatDollarAmount(poolData.feesUSD)}</TYPE.label>
                 </AutoColumn>
                 <AutoColumn gap="4px">
                   <TYPE.main fontWeight={400}>Pool APY</TYPE.main>
