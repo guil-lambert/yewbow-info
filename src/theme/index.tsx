@@ -49,38 +49,38 @@ export function colors(darkMode: boolean): Colors {
     text5: darkMode ? '#2C2F36' : '#EDEEF2',
 
     // backgrounds / greys
-    bg0: darkMode ? '#191B1F' : '#F7F8FA',
-    bg1: darkMode ? '#1F2128' : '#FFFFFF',
-    bg2: darkMode ? '#2C2F36' : '#F7F8FA',
-    bg3: darkMode ? '#40444F' : '#EDEEF2',
-    bg4: darkMode ? '#565A69' : '#CED0D9',
-    bg5: darkMode ? '#6C7284' : '#888D9B',
+    bg0: darkMode ? '#191B1F' : 'hsl(5, 23%, 97%)',
+    bg1: darkMode ? '#1F2128' : 'hsl(5, 100%, 100%)',
+    bg2: darkMode ? '#2C2F36' : 'hsl(5, 23%, 97%)',
+    bg3: darkMode ? '#40444F' : 'hsl(5, 16%, 94%)',
+    bg4: darkMode ? '#565A69' : 'hsl(5, 13%, 83%)',
+    bg5: darkMode ? '#6C7284' : 'hsl(5, 9%, 57%)',
 
     //specialty colors
     modalBG: darkMode ? 'rgba(0,0,0,.425)' : 'rgba(0,0,0,0.3)',
     advancedBG: darkMode ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.6)',
 
     //primary colors
-    primary1: darkMode ? 'hsl(215, 79%, 51%)' : 'hsl(331, 100%, 50%)',
-    primary2: darkMode ? 'hsl(215, 79%, 56%)' : 'hsl(331, 100%, 77%)',
-    primary3: darkMode ? 'hsl(215, 79%, 61%)' : 'hsl(331, 100%, 80%)',
-    primary4: darkMode ? 'hsla(215, 79%, 61%, 70%)' : 'hsl(331, 58%, 92%)',
-    primary5: darkMode ? 'hsla(215, 68%, 26%, 70%)' : 'hsl(331, 83%, 95%)',
+    primary1: darkMode ? 'hsl(215, 79%, 51%)' : 'hsl(110, 63%, 42%)',
+    primary2: darkMode ? 'hsl(215, 79%, 56%)' : 'hsl(110, 90%, 77%)',
+    primary3: darkMode ? 'hsl(215, 79%, 61%)' : 'hsl(110, 90%, 80%)',
+    primary4: darkMode ? 'hsla(215, 79%, 61%, 70%)' : 'hsl(110, 58%, 92%)',
+    primary5: darkMode ? 'hsla(215, 68%, 26%, 70%)' : 'hsl(110, 83%, 95%)',
 
     // color text
-    primaryText1: darkMode ? 'hsl(215, 100%, 71%)' : 'hsl(331, 100%, 50%)',
+    primaryText1: darkMode ? 'hsl(215, 100%, 71%)' : 'hsl(110, 63%, 42%)',
 
     // secondary colors
-    secondary1: darkMode ? 'hsl(215, 79%, 51%)' : 'hsl(331, 100%, 50%)',
-    secondary2: darkMode ? 'hsla(331, 100%, 5%, 26%)' : 'hsl(331, 58%, 92%)',
-    secondary3: darkMode ? 'hsla(331, 100%, 5%, 26%)' : 'hsl(331, 83%, 95%)',
+    secondary1: darkMode ? 'hsl(215, 79%, 51%)' : 'hsl(5, 83%, 72%)',
+    secondary2: darkMode ? 'hsla(331, 100%, 5%, 26%)' : 'hsl(110, 58%, 92%)',
+    secondary3: darkMode ? 'hsla(331, 100%, 5%, 26%)' : 'hsl(110, 83%, 95%)',
 
     // other
     pink1: 'hsl(331, 100%, 50%)',
-    red1: 'hsl(0, 98%, 62%)',
+    red1: 'hsl(5, 83%, 62%)',
     red2: 'hsl(356, 94%, 57%)',
-    red3: 'hsl(0, 100%, 42%)',
-    green1: 'hsl(145, 63%, 42%)',
+    red3: 'hsl(5, 83%, 72%)',
+    green1: 'hsl(110, 63%, 42%)',
     yellow1: 'hsl(48, 100%, 72%)',
     yellow2: 'hsl(29, 90%, 54%)',
     yellow3: 'hsl(205, 99%, 99%)',
@@ -227,7 +227,7 @@ html {
 export const ThemedGlobalStyle = createGlobalStyle`
 html {
   color: ${({ theme }) => theme.text1};
-  background-color: ${({ theme }) => theme.yellow3};
+  background-color: ${({ theme }) => theme.bg1};
 }
 
 .three-line-legend-dark {
