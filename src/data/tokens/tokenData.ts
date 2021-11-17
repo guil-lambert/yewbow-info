@@ -190,26 +190,26 @@ export function useFetchedTokenDatas(tokenAddresses: string[]): {
         : current
         ? parseFloat(current.feesUSD)
         : 0
-
-    accum[address] = {
-      exists: !!current,
-      address,
-      name: current ? formatTokenName(address, current.name) : '',
-      symbol: current ? formatTokenSymbol(address, current.symbol) : '',
-      volumeUSD,
-      volumeUSDChange,
-      volumeUSDWeek,
-      txCount,
-      tvlUSD,
-      feesUSD,
-      tvlUSDChange,
-      tvlToken,
-      voltvl,
-      priceUSD,
-      priceUSDChange,
-      priceUSDChangeWeek,
+    if (current && volumeUSD > 1) {
+      accum[address] = {
+        exists: !!current,
+        address,
+        name: current ? formatTokenName(address, current.name) : '',
+        symbol: current ? formatTokenSymbol(address, current.symbol) : '',
+        volumeUSD,
+        volumeUSDChange,
+        volumeUSDWeek,
+        txCount,
+        tvlUSD,
+        feesUSD,
+        tvlUSDChange,
+        tvlToken,
+        voltvl,
+        priceUSD,
+        priceUSDChange,
+        priceUSDChangeWeek,
+      }
     }
-
     return accum
   }, {})
 

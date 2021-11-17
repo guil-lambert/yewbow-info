@@ -65,7 +65,7 @@ const SORT_FIELD = {
   tvlUSD: 'tvlUSD',
   voltvl: 'voltvl',
   volLiq: 'volLiq',
-  holdRatio: 'holdRatio',
+  totalLockedTick: 'totalLockedTick',
   volatility: 'volatility',
 }
 
@@ -91,16 +91,16 @@ const DataRow = ({ poolData, index }: { poolData: PoolData; index: number }) => 
           {formatDollarAmount(poolData.volumeUSD)}
         </Label>
         <Label end={1} fontWeight={400}>
-          {formatDollarAmount(poolData.tvlUSD)}
-        </Label>
-        <Label end={1} fontWeight={400}>
           {formatDollarAmount(poolData.feeUSD)}
         </Label>
         <Label end={1} fontWeight={400}>
-          {formatAmount(poolData.volatility * 365 ** 0.5 * 100, 0)}%
+          {formatDollarAmount(poolData.tvlUSD)}
         </Label>
         <Label end={1} fontWeight={400}>
-          {formatAmount(poolData.voltvl * 365 * 100, 0)}%
+          {formatDollarAmount(poolData.totalLockedTick, 0)}
+        </Label>
+        <Label end={1} fontWeight={400}>
+          {formatAmount(poolData.volatility * 365 ** 0.5 * 100, 0)}%
         </Label>
         <Label end={1} fontWeight={400}>
           {formatAmount((poolData.volLiq * 100) / poolData.volatility)}%
@@ -179,17 +179,17 @@ export default function PoolTable({ poolDatas, maxItems = MAX_ITEMS }: { poolDat
             <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volumeUSD)}>
               24h Volume {arrow(SORT_FIELD.volumeUSD)}
             </ClickableText>
-            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.tvlUSD)}>
-              TVL {arrow(SORT_FIELD.tvlUSD)}
-            </ClickableText>
             <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.feeUSD)}>
               24h Fees {arrow(SORT_FIELD.feeUSD)}
             </ClickableText>
-            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volLiq)}>
-              Implied Volatility {arrow(SORT_FIELD.holdRatio)}
+            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.tvlUSD)}>
+              TVL {arrow(SORT_FIELD.tvlUSD)}
             </ClickableText>
             <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.voltvl)}>
-              Pool APY {arrow(SORT_FIELD.voltvl)}
+              Tick TVL {arrow(SORT_FIELD.voltvl)}
+            </ClickableText>
+            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volLiq)}>
+              Implied Volatility*{arrow(SORT_FIELD.totalLockedTick)}
             </ClickableText>
             <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volLiq)}>
               LP returns/√day {arrow(SORT_FIELD.tvlUSD)}
