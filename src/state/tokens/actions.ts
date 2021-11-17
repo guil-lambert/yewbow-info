@@ -4,14 +4,12 @@ import { PriceChartEntry, Transaction } from 'types'
 import { SupportedNetwork } from 'constants/networks'
 
 // protocol wide info
-export const updateTokenData = createAction<{ tokens: TokenData[]; networkId: SupportedNetwork }>(
-  'tokens/updateTokenData'
-)
+export const updateTokenData =
+  createAction<{ tokens: TokenData[]; networkId: SupportedNetwork }>('tokens/updateTokenData')
 
 // add token address to byAddress
-export const addTokenKeys = createAction<{ tokenAddresses: string[]; networkId: SupportedNetwork }>(
-  'tokens/addTokenKeys'
-)
+export const addTokenKeys =
+  createAction<{ tokenAddresses: string[]; networkId: SupportedNetwork }>('tokens/addTokenKeys')
 
 // add list of pools token is in
 export const addPoolAddresses = createAction<{

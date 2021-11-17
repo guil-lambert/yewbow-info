@@ -15,6 +15,8 @@ const FEE_TIER_TO_TICK_SPACING = (feeTier: string): number => {
       return 60
     case '500':
       return 10
+    case '100':
+      return 10
     default:
       throw Error(`Tick spacing for fee tier ${feeTier} undefined.`)
   }
@@ -162,7 +164,11 @@ export const fetchTicksSurroundingPrice = async (
   error?: boolean
   data?: PoolTickData
 }> => {
-  const { data: poolResult, error, loading } = await client.query<PoolResult>({
+  const {
+    data: poolResult,
+    error,
+    loading,
+  } = await client.query<PoolResult>({
     query: poolQuery,
     variables: {
       poolAddress,

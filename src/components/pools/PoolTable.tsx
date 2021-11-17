@@ -66,6 +66,7 @@ const SORT_FIELD = {
   voltvl: 'voltvl',
   volLiq: 'volLiq',
   holdRatio: 'holdRatio',
+  volatility: 'volatility',
 }
 
 const DataRow = ({ poolData, index }: { poolData: PoolData; index: number }) => {
@@ -96,13 +97,13 @@ const DataRow = ({ poolData, index }: { poolData: PoolData; index: number }) => 
           {formatDollarAmount(poolData.feeUSD)}
         </Label>
         <Label end={1} fontWeight={400}>
-          {formatAmount(poolData.holdRatio)}
+          {formatAmount(poolData.volatility * 365 ** 0.5 * 100, 0)}%
         </Label>
         <Label end={1} fontWeight={400}>
           {formatAmount(poolData.voltvl * 365 * 100, 0)}%
         </Label>
         <Label end={1} fontWeight={400}>
-          {formatAmount((poolData.volLiq * 100) / 0.05)}% {/* 0.05 = annualized volatility */}
+          {formatAmount((poolData.volLiq * 100) / poolData.volatility)}%
         </Label>
       </ResponsiveGrid>
     </LinkWrapper>
@@ -185,7 +186,7 @@ export default function PoolTable({ poolDatas, maxItems = MAX_ITEMS }: { poolDat
               24h Fees {arrow(SORT_FIELD.feeUSD)}
             </ClickableText>
             <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volLiq)}>
-              Hold {'if >'}1 {arrow(SORT_FIELD.holdRatio)}
+              Implied Volatility {arrow(SORT_FIELD.holdRatio)}
             </ClickableText>
             <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.voltvl)}>
               Pool APY {arrow(SORT_FIELD.voltvl)}

@@ -20,7 +20,6 @@ export const removeSerializedToken = createAction<{ chainId: number; address: st
 export const addSavedToken = createAction<{ address: string }>('user/addSavedToken')
 export const addSavedPool = createAction<{ address: string }>('user/addSavedPool')
 export const addSerializedPair = createAction<{ serializedPair: SerializedPair }>('user/addSerializedPair')
-export const removeSerializedPair = createAction<{ chainId: number; tokenAAddress: string; tokenBAddress: string }>(
-  'user/removeSerializedPair'
-)
+export const removeSerializedPair =
+  createAction<{ chainId: number; tokenAAddress: string; tokenBAddress: string }>('user/removeSerializedPair')
 export const toggleURLWarning = createAction<void>('app/toggleURLWarning')

@@ -54,6 +54,7 @@ export interface PoolData {
   voltvl: number
   volLiq: number
   holdRatio: number
+  volatility: number
   // prices
   token0Price: number
   token1Price: number

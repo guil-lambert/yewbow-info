@@ -52,15 +52,17 @@ export function useFetchProtocolData(
   // fetch all data
   const { loading, error, data } = useQuery<GlobalResponse>(GLOBAL_DATA(), { client: activeDataClient })
 
-  const { loading: loading24, error: error24, data: data24 } = useQuery<GlobalResponse>(
-    GLOBAL_DATA(block24?.number ?? undefined),
-    { client: activeDataClient }
-  )
+  const {
+    loading: loading24,
+    error: error24,
+    data: data24,
+  } = useQuery<GlobalResponse>(GLOBAL_DATA(block24?.number ?? undefined), { client: activeDataClient })
 
-  const { loading: loading48, error: error48, data: data48 } = useQuery<GlobalResponse>(
-    GLOBAL_DATA(block48?.number ?? undefined),
-    { client: activeDataClient }
-  )
+  const {
+    loading: loading48,
+    error: error48,
+    data: data48,
+  } = useQuery<GlobalResponse>(GLOBAL_DATA(block48?.number ?? undefined), { client: activeDataClient })
 
   const anyError = Boolean(error || error24 || error48 || blockError)
   const anyLoading = Boolean(loading || loading24 || loading48)
@@ -134,14 +136,16 @@ export function useFetchAggregateProtocolData(): {
   error: boolean
   data: ProtocolData | undefined
 } {
-  const { data: ethereumData, loading: loadingEthereum, error: errorEthereum } = useFetchProtocolData(
-    client,
-    blockClient
-  )
-  const { data: arbitrumData, loading: loadingArbitrum, error: errorArbitrum } = useFetchProtocolData(
-    arbitrumClient,
-    arbitrumBlockClient
-  )
+  const {
+    data: ethereumData,
+    loading: loadingEthereum,
+    error: errorEthereum,
+  } = useFetchProtocolData(client, blockClient)
+  const {
+    data: arbitrumData,
+    loading: loadingArbitrum,
+    error: errorArbitrum,
+  } = useFetchProtocolData(arbitrumClient, arbitrumBlockClient)
 
   if (!ethereumData && !arbitrumData) {
     return {
