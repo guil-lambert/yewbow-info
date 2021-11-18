@@ -311,8 +311,11 @@ export default function DensityChart({ address }: DensityChartProps) {
                     fill={
                       entry.isCurrent
                         ? theme.pink1
-                        : entry.price0 < poolData?.token1Price * (1 + poolData.volatility * 45 ** 0.5) &&
-                          entry.price0 > poolData?.token1Price / (1 + poolData.volatility * 45 ** 0.5)
+                        : entry.price0 < poolData?.token1Price * (1 + (poolData.volatility * 45 ** 0.5) / 2.5066) &&
+                          entry.price0 > poolData?.token1Price * (1 - (poolData.volatility * 45 ** 0.5) / 2.5066)
+                        ? theme.green1
+                        : entry.price1 < poolData?.token0Price * (1 + (poolData.volatility * 45 ** 0.5) / 2.5066) &&
+                          entry.price1 > poolData?.token0Price * (1 - (poolData.volatility * 45 ** 0.5) / 2.5066)
                         ? theme.green1
                         : theme.blue1
                     }
