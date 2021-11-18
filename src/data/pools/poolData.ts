@@ -229,8 +229,6 @@ export function usePoolDatas(poolAddresses: string[]): {
     const volLiq = (voltvl * (tvl0ETH + tvl1ETH) * feeTier * 1.5957) / (20001 * 50 * tvlTickAvg)
     const totalLockedTick = (tvlTickAvg * tvlUSD) / (tvl0ETH + tvl1ETH)
 
-    //const holdRatio = volumeUSD / (tvlTickAvg * tvlUSD / (tvl0ETH + tvl1ETH))
-    //const holdRatio = (volumeUSD * 365 * 4 * feeTier ** 2) / (10 ** 12 * totalLockedTick)
     const volatility = (2 * feeTier * volumeUSD ** 0.5) / (10 ** 6 * totalLockedTick ** 0.5)
 
     if (current && volumeUSD > 10) {

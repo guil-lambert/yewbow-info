@@ -64,6 +64,7 @@ export interface ChartEntry {
   price1: number
   tvlToken0: number
   tvlToken1: number
+  volatilityTick: number
 }
 
 interface ZoomStateProps {
@@ -162,6 +163,15 @@ export default function DensityChart({ address }: DensityChartProps) {
             const amount0 = token1Amount ? parseFloat(token1Amount.toExact()) * parseFloat(t.price1) : 0
             const amount1 = token1Amount ? parseFloat(token1Amount.toExact()) : 0
 
+            const tvl0ETH = poolData?.token0.derivedETH
+            const tvl1ETH = poolData?.token1.derivedETH
+
+            const tvlTick = (amount0 * tvl0ETH + amount1 * tvl1ETH) / 2
+
+            const totalLockedETH = tvl0ETH * poolData.tvlToken0 + tvl1ETH * poolData.tvlToken1
+            const totalLockedTick = (tvlTick * poolData?.tvlUSD) / totalLockedETH
+
+            const volatilityTick = (2 * feeTier * poolData?.volumeUSD ** 0.5) / (10 ** 6 * totalLockedTick ** 0.5)
             return {
               index: i,
               isCurrent: active,
@@ -170,6 +180,7 @@ export default function DensityChart({ address }: DensityChartProps) {
               price1: parseFloat(t.price1),
               tvlToken0: amount0,
               tvlToken1: amount1,
+              volatilityTick: volatilityTick,
             }
           })
         )
@@ -286,7 +297,7 @@ export default function DensityChart({ address }: DensityChartProps) {
             <XAxis reversed={true} tick={false} />
             <Bar
               dataKey="activeLiquidity"
-              fill="#2172E5"
+              fill="hsl(110, 63%, 42%)"
               isAnimationActive={false}
               shape={(props) => {
                 // eslint-disable-next-line react/prop-types
@@ -294,7 +305,19 @@ export default function DensityChart({ address }: DensityChartProps) {
               }}
             >
               {zoomedData?.map((entry, index) => {
-                return <Cell key={`cell-${index}`} fill={entry.isCurrent ? theme.pink1 : theme.blue1} />
+                return (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={
+                      entry.isCurrent
+                        ? theme.pink1
+                        : entry.price0 < poolData?.token1Price * (1 + poolData.volatility * 45 ** 0.5) &&
+                          entry.price0 > poolData?.token1Price / (1 + poolData.volatility * 45 ** 0.5)
+                        ? theme.green1
+                        : theme.blue1
+                    }
+                  />
+                )
               })}
               <LabelList
                 dataKey="activeLiquidity"
