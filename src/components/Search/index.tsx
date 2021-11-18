@@ -339,7 +339,7 @@ const Search = ({ ...rest }: React.HTMLAttributes<HTMLDivElement>) => {
               </HideSmall>
               <HideSmall>
                 <TYPE.main textAlign="end" fontSize="12px">
-                  LP/√d
+                  Volatility
                 </TYPE.main>
               </HideSmall>
             </ResponsiveGrid>
@@ -374,7 +374,7 @@ const Search = ({ ...rest }: React.HTMLAttributes<HTMLDivElement>) => {
                         <TYPE.label textAlign="end">{formatDollarAmount(p.tvlUSD)}</TYPE.label>
                       </HideSmall>
                       <HideSmall>
-                        <TYPE.label textAlign="end">{formatAmount((p.volLiq * 100) / 0.05)}%</TYPE.label>
+                        <TYPE.label textAlign="end">{formatAmount(p.volatility * 365 ** 0.5 * 100, 0)}%</TYPE.label>
                       </HideSmall>
                     </ResponsiveGrid>
                   </HoverRowLink>
