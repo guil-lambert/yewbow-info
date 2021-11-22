@@ -190,7 +190,7 @@ export function useFetchedTokenDatas(tokenAddresses: string[]): {
         : current
         ? parseFloat(current.feesUSD)
         : 0
-    if (current && volumeUSD > 1) {
+    if (current && volumeUSD > 1000) {
       accum[address] = {
         exists: !!current,
         address,

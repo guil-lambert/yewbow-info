@@ -185,11 +185,11 @@ export default function PoolTable({ poolDatas, maxItems = MAX_ITEMS }: { poolDat
             <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.tvlUSD)}>
               TVL {arrow(SORT_FIELD.tvlUSD)}
             </ClickableText>
-            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.voltvl)}>
-              Tick TVL {arrow(SORT_FIELD.voltvl)}
+            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.totalLockedTick)}>
+              Tick TVL {arrow(SORT_FIELD.totalLockedTick)}
             </ClickableText>
-            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volLiq)}>
-              Implied Volatility*{arrow(SORT_FIELD.totalLockedTick)}
+            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volatility)}>
+              Implied Volatility*{arrow(SORT_FIELD.volatility)}
             </ClickableText>
             <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volLiq)}>
               LP returns/√day {arrow(SORT_FIELD.tvlUSD)}
