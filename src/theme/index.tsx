@@ -83,7 +83,7 @@ export function colors(darkMode: boolean): Colors {
     green1: 'hsl(110, 63%, 42%)',
     yellow1: 'hsl(48, 100%, 72%)',
     yellow2: 'hsl(29, 90%, 54%)',
-    yellow3: 'hsl(205, 99%, 99%)',
+    yellow3: 'hsl(215, 100%, 80%)',
     blue1: 'hsl(215, 79%, 51%)',
     blue2: 'hsl(215, 100%, 66%)',
 

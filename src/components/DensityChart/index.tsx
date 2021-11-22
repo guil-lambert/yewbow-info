@@ -1,6 +1,6 @@
 import { fetchTicksSurroundingPrice, TickProcessed } from 'data/pools/tickData'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
-import { BarChart, Bar, LabelList, XAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts'
+import { BarChart, Bar, LabelList, XAxis, Tooltip, ResponsiveContainer, ReferenceLine, Cell } from 'recharts'
 import Loader from 'components/Loader'
 import styled from 'styled-components'
 import useTheme from 'hooks/useTheme'
@@ -255,6 +255,8 @@ export default function DensityChart({ address }: DensityChartProps) {
     return <Loader />
   }
 
+  const dte = 45
+
   const CustomBar = ({
     x,
     y,
@@ -311,13 +313,21 @@ export default function DensityChart({ address }: DensityChartProps) {
                     fill={
                       entry.isCurrent
                         ? theme.pink1
-                        : entry.price0 < poolData?.token1Price * (1 + (poolData.volatility * 45 ** 0.5) / 2.5066) &&
-                          entry.price0 > poolData?.token1Price * (1 - (poolData.volatility * 45 ** 0.5) / 2.5066)
-                        ? theme.green1
-                        : entry.price1 < poolData?.token0Price * (1 + (poolData.volatility * 45 ** 0.5) / 2.5066) &&
-                          entry.price1 > poolData?.token0Price * (1 - (poolData.volatility * 45 ** 0.5) / 2.5066)
-                        ? theme.green1
-                        : theme.blue1
+                        : entry.price0 < poolData?.token1Price * (1 + (poolData.volatility * dte ** 0.5) / 2.5066) &&
+                          entry.price0 > poolData?.token1Price / (1 + (poolData.volatility * dte ** 0.5) / 2.5066)
+                        ? theme.blue1
+                        : entry.price1 < poolData?.token0Price * (1 + (poolData.volatility * dte ** 0.5) / 2.5066) &&
+                          entry.price1 > poolData?.token0Price / (1 + (poolData.volatility * dte ** 0.5) / 2.5066)
+                        ? theme.blue1
+                        : entry.price0 <
+                            poolData?.token1Price * (1 + (2 * poolData.volatility * dte ** 0.5) / 2.5066) &&
+                          entry.price0 > poolData?.token1Price / (1 + (2 * poolData.volatility * dte ** 0.5) / 2.5066)
+                        ? theme.blue2
+                        : entry.price1 <
+                            poolData?.token0Price * (1 + (2 * poolData.volatility * dte ** 0.5) / 2.5066) &&
+                          entry.price1 > poolData?.token0Price / (1 + (2 * poolData.volatility * dte ** 0.5) / 2.5066)
+                        ? theme.blue2
+                        : theme.yellow3
                     }
                   />
                 )
