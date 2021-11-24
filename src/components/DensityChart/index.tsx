@@ -21,6 +21,37 @@ const Wrapper = styled.div`
   height: 400px;
 `
 
+const DTEsWrapper = styled.div`
+  position: absolute;
+  right: 0px;
+  bottom: 375px;
+  padding: 4px;
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-column-gap: 6px;
+`
+
+const DTEButton = styled.div<{ disabled?: boolean }>`
+  width: 32x;
+  border-radius: 50%;
+  background-color: black;
+  padding: 4px 8px;
+  display: flex;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 500;
+  align-items: center;
+  opacity: ${({ disabled }) => (disabled ? 0.4 : 0.9)};
+  background-color: ${({ theme, disabled }) => (disabled ? theme.bg3 : theme.bg2)};
+  user-select: none;
+
+  :hover {
+    cursor: pointer;
+    opacity: 0.4;
+  }
+`
+
 const ControlsWrapper = styled.div`
   position: absolute;
   right: 40px;
@@ -255,7 +286,7 @@ export default function DensityChart({ address }: DensityChartProps) {
     return <Loader />
   }
 
-  const dte = 45
+  const dte = 14
 
   const CustomBar = ({
     x,
@@ -343,6 +374,15 @@ export default function DensityChart({ address }: DensityChartProps) {
       ) : (
         <Loader />
       )}
+      <DTEsWrapper>
+        <DTEButton disabled={false} onClick={handleZoomOut}>
+          <small>-dte</small>
+        </DTEButton>
+        <DTEButton disabled={true}>{dte}</DTEButton>
+        <DTEButton disabled={atZoomMax} onClick={handleZoomIn}>
+          <small>+dte</small>
+        </DTEButton>
+      </DTEsWrapper>
       <ControlsWrapper>
         <ActionButton disabled={false} onClick={handleZoomOut}>
           -
