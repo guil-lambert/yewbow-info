@@ -61,7 +61,7 @@ const LinkWrapper = styled(Link)`
 const SORT_FIELD = {
   feeTier: 'feeTier',
   volumeUSD: 'volumeUSD',
-  feeUSD: 'feeUSD',
+  feesUSD: 'feesUSD',
   tvlUSD: 'tvlUSD',
   voltvl: 'voltvl',
   volLiq: 'volLiq',
@@ -91,7 +91,7 @@ const DataRow = ({ poolData, index }: { poolData: PoolData; index: number }) => 
           {formatDollarAmount(poolData.volumeUSD)}
         </Label>
         <Label end={1} fontWeight={400}>
-          {formatDollarAmount(poolData.feeUSD)}
+          {formatDollarAmount(poolData.feesUSD)}
         </Label>
         <Label end={1} fontWeight={400}>
           {formatDollarAmount(poolData.tvlUSD)}
@@ -179,8 +179,8 @@ export default function PoolTable({ poolDatas, maxItems = MAX_ITEMS }: { poolDat
             <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volumeUSD)}>
               24h Volume {arrow(SORT_FIELD.volumeUSD)}
             </ClickableText>
-            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.feeUSD)}>
-              24h Fees {arrow(SORT_FIELD.feeUSD)}
+            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.feesUSD)}>
+              24h Fees {arrow(SORT_FIELD.feesUSD)}
             </ClickableText>
             <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.tvlUSD)}>
               TVL {arrow(SORT_FIELD.tvlUSD)}
