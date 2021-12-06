@@ -10,6 +10,21 @@ dayjs.extend(utc)
 dayjs.extend(weekOfYear)
 const ONE_DAY_UNIX = 24 * 60 * 60
 
+const POOL_HOUR_CHART = gql`
+  query poolHourDatas($startTime: Int!, $skip: Int!, $address: Bytes!) {
+    poolHourDatas(
+      first: 100
+      where: { pool: $address }
+      orderBy: periodStartUnix
+      orderDirection: desc
+      subgraphError: allow
+    ) {
+      tick
+      periodStartUnix
+    }
+  }
+`
+
 const POOL_CHART = gql`
   query poolDayDatas($startTime: Int!, $skip: Int!, $address: Bytes!) {
     poolDayDatas(
