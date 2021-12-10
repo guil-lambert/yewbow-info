@@ -323,6 +323,7 @@ export default function DensityChart({ address }: DensityChartProps) {
             }}
           >
             <Tooltip
+              position={{ x: 0, y: -50 }}
               content={(props) => (
                 <CustomToolTip chartProps={props} poolData={poolData} currentPrice={poolData.token0Price} />
               )}

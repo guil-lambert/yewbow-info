@@ -3,6 +3,7 @@ import { PoolData } from 'state/pools/reducer'
 import styled from 'styled-components'
 import { LightCard } from 'components/Card'
 import useTheme from 'hooks/useTheme'
+import { erf, log } from 'mathjs'
 import { AutoColumn } from 'components/Column'
 import { TYPE } from 'theme'
 import { RowBetween } from 'components/Row'
@@ -44,14 +45,20 @@ export function CustomToolTip({ chartProps, poolData, currentPrice }: CustomTool
   const totalLockedTick = (tvlTick * poolData?.tvlUSD) / totalLockedETH
   const volatility = (2 * poolData?.feeTier * poolData?.volumeUSD ** 0.5) / (10 ** 6 * totalLockedTick ** 0.5)
   const LPret = (voltvl * totalLockedETH * poolData.feeTier * 1.5957 * 100) / (20001 * 50 * tvlTick * volatility)
-
+  const dte = 14
+  const sigma = Math.min(volatility, 0.26)
+  const delta = currentPrice
+    ? 0.5 + 0.5 * erf((log(currentPrice / price1) + (dte / 2) * sigma ** 2) / (sigma * (2 * dte) ** 0.5))
+    : 0
   return (
     <TooltipWrapper>
       <AutoColumn gap="sm">
         <TYPE.main color={theme.text3}>Tick stats</TYPE.main>
         <RowBetween>
-          <TYPE.label>LP/√day: </TYPE.label>
-          <TYPE.label>{formatAmount(LPret)}%</TYPE.label>
+          <TYPE.label>Call | Put Delta: </TYPE.label>
+          <TYPE.label>
+            {formatAmount(100 - delta * 100, 0)} | {formatAmount(delta * 100, 0)}
+          </TYPE.label>
         </RowBetween>
         <RowBetween>
           <TYPE.label>At tick volatility: </TYPE.label>
