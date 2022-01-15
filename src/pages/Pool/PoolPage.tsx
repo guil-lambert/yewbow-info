@@ -67,6 +67,7 @@ enum ChartView {
   DENSITY,
   ROL,
   TXSIZE,
+  VOLATILITY,
 }
 
 export default function PoolPage({
@@ -125,6 +126,23 @@ export default function PoolPage({
         return {
           time: unixToDate(day.date),
           value: day.feesUSD / day.totalValueLockedUSD,
+        }
+      })
+    } else {
+      return []
+    }
+  }, [chartData])
+
+  const formattedVolatilityData = useMemo(() => {
+    if (chartData) {
+      return chartData.map((day) => {
+        return {
+          time: unixToDate(day.date),
+          value:
+            2 *
+            365 ** 0.5 *
+            (((day.feesUSD / day.volumeUSD) * day.volumeToken0 * day.token1Price ** 0.5 * 10 ** 18) / day.liquidity) **
+              0.5,
         }
       })
     } else {
@@ -288,13 +306,15 @@ export default function PoolPage({
                   <TYPE.label fontSize="24px" height="30px">
                     <MonoSpace>
                       {latestValue
-                        ? view === ChartView.ROL
+                        ? view === ChartView.VOLATILITY
                           ? formatPercentAmount(latestValue)
                           : view === ChartView.TXSIZE
                           ? formatDollarAmount(latestValue)
                           : formatDollarAmount(latestValue)
                         : view === ChartView.TXSIZE
                         ? formatAmount(formattedTxSizeData[formattedTxSizeData.length - 1]?.value)
+                        : view === ChartView.VOLATILITY
+                        ? formatPercentAmount(formattedVolatilityData[formattedVolatilityData.length - 1]?.value)
                         : view === ChartView.VOL
                         ? formatDollarAmount(formattedVolumeData[formattedVolumeData.length - 1]?.value)
                         : view === ChartView.ROL
@@ -308,7 +328,7 @@ export default function PoolPage({
                     {valueLabel ? <MonoSpace>{valueLabel} (UTC)</MonoSpace> : ''}
                   </TYPE.main>
                 </AutoColumn>
-                <ToggleWrapper width="350px">
+                <ToggleWrapper width="450px">
                   <ToggleElementFree
                     isActive={view === ChartView.VOL}
                     fontSize="12px"
@@ -331,11 +351,13 @@ export default function PoolPage({
                     avgTxnSize
                   </ToggleElementFree>
                   <ToggleElementFree
-                    isActive={view === ChartView.ROL}
+                    isActive={view === ChartView.VOLATILITY}
                     fontSize="12px"
-                    onClick={() => (view === ChartView.ROL ? setView(ChartView.DENSITY) : setView(ChartView.ROL))}
+                    onClick={() =>
+                      view === ChartView.VOLATILITY ? setView(ChartView.VOLATILITY) : setView(ChartView.VOLATILITY)
+                    }
                   >
-                    ROL
+                    Impl. Vol.
                   </ToggleElementFree>
                   <ToggleElementFree
                     isActive={view === ChartView.DENSITY}
@@ -369,6 +391,16 @@ export default function PoolPage({
               ) : view === ChartView.TXSIZE ? (
                 <LineChart
                   data={formattedTxSizeData}
+                  color={backgroundColor}
+                  minHeight={340}
+                  setValue={setLatestValue}
+                  setLabel={setValueLabel}
+                  value={latestValue}
+                  label={valueLabel}
+                />
+              ) : view === ChartView.VOLATILITY ? (
+                <LineChart
+                  data={formattedVolatilityData}
                   color={backgroundColor}
                   minHeight={340}
                   setValue={setLatestValue}

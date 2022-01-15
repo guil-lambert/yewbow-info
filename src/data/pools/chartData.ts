@@ -37,9 +37,14 @@ const POOL_CHART = gql`
     ) {
       date
       volumeUSD
+      volumeToken0
+      volumeToken1
       tvlUSD
       feesUSD
       txCount
+      liquidity
+      token0Price
+      token1Price
     }
   }
 `
@@ -48,9 +53,14 @@ interface ChartResults {
   poolDayDatas: {
     date: number
     volumeUSD: string
+    volumeToken0: string
+    volumeToken1: string
     tvlUSD: string
     feesUSD: string
     txCount: string
+    liquidity: string
+    token0Price: string
+    token1Price: string
   }[]
 }
 
@@ -58,9 +68,14 @@ export async function fetchPoolChartData(address: string, client: ApolloClient<N
   let data: {
     date: number
     volumeUSD: string
+    volumeToken0: string
+    volumeToken1: string
     tvlUSD: string
     feesUSD: string
     txCount: string
+    liquidity: string
+    token0Price: string
+    token1Price: string
   }[] = []
   const startTimestamp = 1619170975
   const endTimestamp = dayjs.utc().unix()
@@ -104,9 +119,14 @@ export async function fetchPoolChartData(address: string, client: ApolloClient<N
       accum[roundedDate] = {
         date: dayData.date,
         volumeUSD: parseFloat(dayData.volumeUSD),
+        volumeToken0: parseFloat(dayData.volumeToken0),
+        volumeToken1: parseFloat(dayData.volumeToken1),
         totalValueLockedUSD: parseFloat(dayData.tvlUSD),
         feesUSD: parseFloat(dayData.feesUSD),
         txCount: parseFloat(dayData.txCount),
+        liquidity: parseFloat(dayData.liquidity),
+        token0Price: parseFloat(dayData.token0Price),
+        token1Price: parseFloat(dayData.token1Price),
       }
       return accum
     }, {})
@@ -123,9 +143,14 @@ export async function fetchPoolChartData(address: string, client: ApolloClient<N
         formattedExisting[currentDayIndex] = {
           date: nextDay,
           volumeUSD: 0,
+          volumeToken0: 0,
+          volumeToken1: 0,
           totalValueLockedUSD: latestTvl,
           feesUSD: 0,
           txCount: 0,
+          liquidity: 0,
+          token0Price: 0,
+          token1Price: 0,
         }
       } else {
         latestTvl = formattedExisting[currentDayIndex].totalValueLockedUSD
