@@ -33,6 +33,10 @@ export interface PoolData {
     derivedETH: number
   }
 
+  poolDayData: {
+    txCount: number
+    volumeUSD: number
+  }
   // for tick math
   liquidity: number
   sqrtPrice: number
@@ -42,6 +46,11 @@ export interface PoolData {
   volumeUSD: number
   volumeUSDChange: number
   volumeUSDWeek: number
+  volumeToken0: number
+  volumeToken1: number
+
+  //eth Price
+  ethPrice: number
 
   //fees
   feeUSD: number
@@ -81,6 +90,7 @@ export type PoolChartEntry = {
   volumeToken1: number
   totalValueLockedUSD: number
   feesUSD: number
+  tick: number
   txCount: number
   liquidity: number
   token0Price: number

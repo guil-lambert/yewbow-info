@@ -38,6 +38,10 @@ export const POOLS_BULK = (block: number | undefined, pools: string[]) => {
             decimals
             derivedETH
         }
+        poolDayData(first: 1, skip: 1, orderBy: date, orderDirection:desc) {
+          txCount
+          volumeUSD
+        }        
         token0Price
         token1Price
         volumeUSD
@@ -72,9 +76,15 @@ interface PoolFields {
     decimals: string
     derivedETH: string
   }
+  poolDayData: {
+    txCount: string
+    volumeUSD: string
+  }
   token0Price: string
   token1Price: string
   volumeUSD: string
+  volumeToken0: string
+  volumeToken1: string
   txCount: string
   totalValueLockedToken0: string
   totalValueLockedToken1: string
@@ -229,6 +239,10 @@ export function usePoolDatas(poolAddresses: string[]): {
     const volLiq = (voltvl * (tvl0ETH + tvl1ETH) * feeTier * 1.5957) / (20001 * 50 * tvlTickAvg)
     const totalLockedTick = (tvlTickAvg * tvlUSD) / (tvl0ETH + tvl1ETH)
 
+    //const ethPrice = tvlUSD / (tvlToken1 + tvlToken0 * 1.0001 ** tick)
+    const ethPrice = tvlUSD / (tvl0ETH + tvl1ETH)
+    const volumeToken0 = current ? parseFloat(current.token0.derivedETH) : 0
+    const volumeToken1 = current ? parseFloat(current.poolDayData.volumeUSD) : 0
     const volatility = (2 * feeTier * volumeUSD ** 0.5) / (10 ** 6 * totalLockedTick ** 0.5)
 
     if (current && volumeUSD > 1000 && totalLockedTick > 100) {
@@ -252,11 +266,18 @@ export function usePoolDatas(poolAddresses: string[]): {
           decimals: parseInt(current.token1.decimals),
           derivedETH: parseFloat(current.token1.derivedETH),
         },
+        poolDayData: {
+          txCount: parseFloat(current.poolDayData.txCount),
+          volumeUSD: parseFloat(current.poolDayData.volumeUSD),
+        },
         token0Price: parseFloat(current.token0Price),
         token1Price: parseFloat(current.token1Price),
         volumeUSD,
         volumeUSDChange,
         volumeUSDWeek,
+        volumeToken0,
+        volumeToken1,
+        ethPrice,
         feeUSD,
         tvlUSD,
         tvlUSDChange,

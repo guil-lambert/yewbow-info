@@ -63,10 +63,9 @@ const ResponsiveRow = styled(RowBetween)`
 enum ChartView {
   TVL,
   VOL,
-  PRICE,
   DENSITY,
   ROL,
-  TXSIZE,
+  PRICE,
   VOLATILITY,
 }
 
@@ -90,7 +89,7 @@ export default function PoolPage({
   const chartData = usePoolChartData(address)
   const transactions = usePoolTransactions(address)
 
-  const [view, setView] = useState(ChartView.VOL)
+  const [view, setView] = useState(ChartView.PRICE)
   const [latestValue, setLatestValue] = useState<number | undefined>()
   const [valueLabel, setValueLabel] = useState<string | undefined>()
 
@@ -150,12 +149,12 @@ export default function PoolPage({
     }
   }, [chartData])
 
-  const formattedTxSizeData = useMemo(() => {
+  const formattedPriceData = useMemo(() => {
     if (chartData) {
       return chartData.map((day) => {
         return {
           time: unixToDate(day.date),
-          value: day.volumeUSD / day.txCount,
+          value: 1.0001 ** -day.tick, // < 0 ? 1.0001 ** -day.tick : 1.0001 ** day.tick,
         }
       })
     } else {
@@ -163,6 +162,38 @@ export default function PoolPage({
     }
   }, [chartData])
 
+  function getStandardDeviation(array: any) {
+    const n = array.length
+    const mean = array.reduce((a: any, b: any) => a + b, 0) / n
+    return Math.sqrt(array.map((x: any) => Math.pow(x - mean, 2)).reduce((a: any, b: any) => a + b, 0) / n)
+  }
+  const tickData = useMemo(() => {
+    if (chartData) {
+      return chartData.map((day) => {
+        day.tick
+      })
+    } else {
+      return []
+    }
+  }, [chartData])
+
+  const ss = formattedPriceData.map(function (object) {
+    return Math.log(object.value) / Math.log(1.0001)
+  })
+
+  const diff =
+    ss.length > 28
+      ? ss.slice(-29, -1).map((a, i) => a * 0.0001 - ss.slice(-28)[i] * 0.0001)
+      : ss.length > 7
+      ? ss.slice(-8, -1).map((a, i) => a * 0.0001 - ss.slice(-7)[i] * 0.0001)
+      : 0
+
+  const sd =
+    ss.length > 28
+      ? '28d realized Vol = ' + formatPercentAmount(getStandardDeviation(diff) * 365 ** 0.5)
+      : ss.length > 7
+      ? '7d realized Vol = ' + formatPercentAmount(getStandardDeviation(diff) * 365 ** 0.5)
+      : 0
   //watchlist
   const [savedPools, addSavedPool] = useSavedPools()
 
@@ -307,14 +338,24 @@ export default function PoolPage({
                     <MonoSpace>
                       {latestValue
                         ? view === ChartView.VOLATILITY
-                          ? formatPercentAmount(latestValue)
-                          : view === ChartView.TXSIZE
-                          ? formatDollarAmount(latestValue)
+                          ? formatPercentAmount(
+                              10 ** (poolData.token0.decimals / 4 - poolData.token1.decimals / 4) * latestValue
+                            )
+                          : view === ChartView.PRICE
+                          ? formatDollarAmount(
+                              10 ** (poolData.token1.decimals - poolData.token0.decimals) * latestValue
+                            )
                           : formatDollarAmount(latestValue)
-                        : view === ChartView.TXSIZE
-                        ? formatAmount(formattedTxSizeData[formattedTxSizeData.length - 1]?.value)
+                        : view === ChartView.PRICE
+                        ? formatAmount(
+                            10 ** (poolData.token1.decimals - poolData.token0.decimals) *
+                              formattedPriceData[formattedPriceData.length - 1]?.value
+                          )
                         : view === ChartView.VOLATILITY
-                        ? formatPercentAmount(formattedVolatilityData[formattedVolatilityData.length - 1]?.value)
+                        ? formatPercentAmount(
+                            10 ** (poolData.token0.decimals / 4 - poolData.token1.decimals / 4) *
+                              formattedVolatilityData[formattedVolatilityData.length - 1]?.value
+                          )
                         : view === ChartView.VOL
                         ? formatDollarAmount(formattedVolumeData[formattedVolumeData.length - 1]?.value)
                         : view === ChartView.ROL
@@ -344,11 +385,11 @@ export default function PoolPage({
                     TVL
                   </ToggleElementFree>
                   <ToggleElementFree
-                    isActive={view === ChartView.TXSIZE}
+                    isActive={view === ChartView.PRICE}
                     fontSize="12px"
-                    onClick={() => (view === ChartView.TXSIZE ? setView(ChartView.DENSITY) : setView(ChartView.TXSIZE))}
+                    onClick={() => (view === ChartView.PRICE ? setView(ChartView.DENSITY) : setView(ChartView.PRICE))}
                   >
-                    avgTxnSize
+                    Price
                   </ToggleElementFree>
                   <ToggleElementFree
                     isActive={view === ChartView.VOLATILITY}
@@ -388,9 +429,9 @@ export default function PoolPage({
                   value={latestValue}
                   label={valueLabel}
                 />
-              ) : view === ChartView.TXSIZE ? (
+              ) : view === ChartView.PRICE ? (
                 <LineChart
-                  data={formattedTxSizeData}
+                  data={formattedPriceData}
                   color={backgroundColor}
                   minHeight={340}
                   setValue={setLatestValue}
@@ -407,6 +448,7 @@ export default function PoolPage({
                   setLabel={setValueLabel}
                   value={latestValue}
                   label={valueLabel}
+                  topLeft={sd}
                 />
               ) : view === ChartView.ROL ? (
                 <LineChart

@@ -40,6 +40,7 @@ const POOL_CHART = gql`
       volumeToken0
       volumeToken1
       tvlUSD
+      tick
       feesUSD
       txCount
       liquidity
@@ -57,6 +58,7 @@ interface ChartResults {
     volumeToken1: string
     tvlUSD: string
     feesUSD: string
+    tick: string
     txCount: string
     liquidity: string
     token0Price: string
@@ -72,6 +74,7 @@ export async function fetchPoolChartData(address: string, client: ApolloClient<N
     volumeToken1: string
     tvlUSD: string
     feesUSD: string
+    tick: string
     txCount: string
     liquidity: string
     token0Price: string
@@ -123,6 +126,7 @@ export async function fetchPoolChartData(address: string, client: ApolloClient<N
         volumeToken1: parseFloat(dayData.volumeToken1),
         totalValueLockedUSD: parseFloat(dayData.tvlUSD),
         feesUSD: parseFloat(dayData.feesUSD),
+        tick: parseFloat(dayData.tick),
         txCount: parseFloat(dayData.txCount),
         liquidity: parseFloat(dayData.liquidity),
         token0Price: parseFloat(dayData.token0Price),
@@ -147,6 +151,7 @@ export async function fetchPoolChartData(address: string, client: ApolloClient<N
           volumeToken1: 0,
           totalValueLockedUSD: latestTvl,
           feesUSD: 0,
+          tick: 0,
           txCount: 0,
           liquidity: 0,
           token0Price: 0,
