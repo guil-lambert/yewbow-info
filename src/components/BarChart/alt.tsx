@@ -81,7 +81,7 @@ const Chart = ({
         {topLeft ?? null}
         {topRight ?? null}
       </RowBetween>
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="400%" height="100%">
         <BarChart
           width={500}
           height={300}

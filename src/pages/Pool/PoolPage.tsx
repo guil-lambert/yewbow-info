@@ -64,7 +64,6 @@ enum ChartView {
   TVL,
   VOL,
   DENSITY,
-  ROL,
   PRICE,
   VOLATILITY,
 }
@@ -92,6 +91,7 @@ export default function PoolPage({
   const [view, setView] = useState(ChartView.PRICE)
   const [latestValue, setLatestValue] = useState<number | undefined>()
   const [valueLabel, setValueLabel] = useState<string | undefined>()
+  const decimalFactor = 10 ** (poolData?.token0.decimals / 4 - poolData?.token1.decimals / 4)
 
   const formattedTvlData = useMemo(() => {
     if (chartData) {
@@ -119,25 +119,13 @@ export default function PoolPage({
     }
   }, [chartData])
 
-  const formattedReturnOnLiqData = useMemo(() => {
-    if (chartData) {
-      return chartData.map((day) => {
-        return {
-          time: unixToDate(day.date),
-          value: day.feesUSD / day.totalValueLockedUSD,
-        }
-      })
-    } else {
-      return []
-    }
-  }, [chartData])
-
   const formattedVolatilityData = useMemo(() => {
     if (chartData) {
       return chartData.map((day) => {
         return {
           time: unixToDate(day.date),
           value:
+            Math.min(1 / decimalFactor, decimalFactor) *
             2 *
             365 ** 0.5 *
             (((day.feesUSD / day.volumeUSD) * day.volumeToken0 * day.token1Price ** 0.5 * 10 ** 18) / day.liquidity) **
@@ -154,7 +142,7 @@ export default function PoolPage({
       return chartData.map((day) => {
         return {
           time: unixToDate(day.date),
-          value: 1.0001 ** -day.tick, // < 0 ? 1.0001 ** -day.tick : 1.0001 ** day.tick,
+          value: Math.max(1 / decimalFactor, decimalFactor) ** 4 * 1.0001 ** -day.tick,
         }
       })
     } else {
@@ -195,6 +183,7 @@ export default function PoolPage({
       ? '7d realized Vol = ' + formatPercentAmount(getStandardDeviation(diff) * 365 ** 0.5)
       : 0
   //watchlist
+  const sd0 = ss.length > 1 ? getStandardDeviation(diff) * 365 ** 0.5 : 0
   const [savedPools, addSavedPool] = useSavedPools()
 
   return (
@@ -338,28 +327,16 @@ export default function PoolPage({
                     <MonoSpace>
                       {latestValue
                         ? view === ChartView.VOLATILITY
-                          ? formatPercentAmount(
-                              10 ** (poolData.token0.decimals / 4 - poolData.token1.decimals / 4) * latestValue
-                            )
+                          ? formatPercentAmount(latestValue)
                           : view === ChartView.PRICE
-                          ? formatDollarAmount(
-                              10 ** (poolData.token1.decimals - poolData.token0.decimals) * latestValue
-                            )
+                          ? formatAmount(latestValue)
                           : formatDollarAmount(latestValue)
                         : view === ChartView.PRICE
-                        ? formatAmount(
-                            10 ** (poolData.token1.decimals - poolData.token0.decimals) *
-                              formattedPriceData[formattedPriceData.length - 1]?.value
-                          )
+                        ? formatAmount(formattedPriceData[formattedPriceData.length - 1]?.value)
                         : view === ChartView.VOLATILITY
-                        ? formatPercentAmount(
-                            10 ** (poolData.token0.decimals / 4 - poolData.token1.decimals / 4) *
-                              formattedVolatilityData[formattedVolatilityData.length - 1]?.value
-                          )
+                        ? formatPercentAmount(formattedVolatilityData[formattedVolatilityData.length - 1]?.value)
                         : view === ChartView.VOL
                         ? formatDollarAmount(formattedVolumeData[formattedVolumeData.length - 1]?.value)
-                        : view === ChartView.ROL
-                        ? formatPercentAmount(formattedReturnOnLiqData[formattedReturnOnLiqData.length - 1]?.value)
                         : view === ChartView.DENSITY
                         ? ''
                         : formatDollarAmount(formattedTvlData[formattedTvlData.length - 1]?.value)}{' '}
@@ -380,7 +357,7 @@ export default function PoolPage({
                   <ToggleElementFree
                     isActive={view === ChartView.TVL}
                     fontSize="12px"
-                    onClick={() => (view === ChartView.TVL ? setView(ChartView.ROL) : setView(ChartView.TVL))}
+                    onClick={() => (view === ChartView.TVL ? setView(ChartView.TVL) : setView(ChartView.TVL))}
                   >
                     TVL
                   </ToggleElementFree>
@@ -416,6 +393,7 @@ export default function PoolPage({
                   color={backgroundColor}
                   minHeight={340}
                   setValue={setLatestValue}
+                  yAxisLabel={'TVL'}
                   value={latestValue}
                   label={valueLabel}
                 />
@@ -438,23 +416,15 @@ export default function PoolPage({
                   setLabel={setValueLabel}
                   value={latestValue}
                   label={valueLabel}
+                  yAxisLabel={poolData.token0.symbol + ' per ' + poolData.token1.symbol}
                 />
               ) : view === ChartView.VOLATILITY ? (
                 <LineChart
                   data={formattedVolatilityData}
                   color={backgroundColor}
                   minHeight={340}
-                  setValue={setLatestValue}
-                  setLabel={setValueLabel}
-                  value={latestValue}
-                  label={valueLabel}
-                  topLeft={sd}
-                />
-              ) : view === ChartView.ROL ? (
-                <LineChart
-                  data={formattedReturnOnLiqData}
-                  color={backgroundColor}
-                  minHeight={340}
+                  yAxisLabel={'Impl. Vol'}
+                  referenceLine={sd0}
                   setValue={setLatestValue}
                   setLabel={setValueLabel}
                   value={latestValue}
