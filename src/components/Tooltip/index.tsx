@@ -14,7 +14,7 @@ interface TooltipProps extends Omit<PopoverProps, 'content'> {
 }
 
 export default function Tooltip({ text, ...rest }: TooltipProps) {
-  return <Popover content={<TooltipContainer>{text}</TooltipContainer>} {...rest} />
+  return <Popover placement={'top'} content={<TooltipContainer>{text}</TooltipContainer>} {...rest} />
 }
 
 export function MouseoverTooltip({ children, ...rest }: Omit<TooltipProps, 'show'>) {

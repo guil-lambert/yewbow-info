@@ -12,6 +12,7 @@ import DoubleCurrencyLogo from 'components/DoubleLogo'
 import { feeTierPercent } from 'utils'
 import { Label, ClickableText } from 'components/Text'
 import { PageButtons, Arrow, Break } from 'components/shared'
+import QuestionHelper from 'components/QuestionHelper'
 import { POOL_HIDE } from '../../constants/index'
 import useTheme from 'hooks/useTheme'
 import { networkPrefix } from 'utils/networkPrefix'
@@ -26,7 +27,7 @@ const ResponsiveGrid = styled.div`
   grid-gap: 1em;
   align-items: center;
 
-  grid-template-columns: 20px 3.5fr repeat(6, 1.5fr);
+  grid-template-columns: 20px 3.5fr repeat(5, 1.5fr);
 
   @media screen and (max-width: 900px) {
     grid-template-columns: 20px 1.5fr repeat(2, 1fr);
@@ -102,15 +103,12 @@ const DataRow = ({ poolData, index }: { poolData: PoolData; index: number }) => 
         <Label end={1} fontWeight={400}>
           {formatAmount(poolData.volatility * 365 ** 0.5 * 100, 0)}%
         </Label>
-        <Label end={1} fontWeight={400}>
-          {formatAmount((poolData.volLiq * 100) / poolData.volatility)}%
-        </Label>
       </ResponsiveGrid>
     </LinkWrapper>
   )
 }
 
-const MAX_ITEMS = 20
+const MAX_ITEMS = 50
 
 export default function PoolTable({ poolDatas, maxItems = MAX_ITEMS }: { poolDatas: PoolData[]; maxItems?: number }) {
   // theming
@@ -183,16 +181,16 @@ export default function PoolTable({ poolDatas, maxItems = MAX_ITEMS }: { poolDat
               24h Fees {arrow(SORT_FIELD.feesUSD)}
             </ClickableText>
             <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.tvlUSD)}>
-              TVL {arrow(SORT_FIELD.tvlUSD)}
+              TVL <QuestionHelper text={'Total Value Locked'} />
+              {arrow(SORT_FIELD.tvlUSD)}
             </ClickableText>
             <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.totalLockedTick)}>
-              Tick TVL {arrow(SORT_FIELD.totalLockedTick)}
+              Tick TVL <QuestionHelper text={'Value locked at the current tick'} />
+              {arrow(SORT_FIELD.totalLockedTick)}
             </ClickableText>
             <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volatility)}>
-              Implied Volatility*{arrow(SORT_FIELD.volatility)}
-            </ClickableText>
-            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volLiq)}>
-              LP returns/√day {arrow(SORT_FIELD.tvlUSD)}
+              Implied Volatility <QuestionHelper text={'IV = 2*feeTier* √(Volume/TickTVL)'} />
+              {arrow(SORT_FIELD.volatility)}
             </ClickableText>
           </ResponsiveGrid>
           <Break />

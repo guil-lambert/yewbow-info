@@ -25,6 +25,7 @@ import DoubleCurrencyLogo from 'components/DoubleLogo'
 import TransactionTable from 'components/TransactionsTable'
 import { useSavedPools } from 'state/user/hooks'
 import DensityChart from 'components/DensityChart'
+import QuestionHelper from 'components/QuestionHelper'
 import { MonoSpace } from 'components/shared'
 import { useActiveNetworkVersion } from 'state/application/hooks'
 import { networkPrefix } from 'utils/networkPrefix'
@@ -375,7 +376,7 @@ export default function PoolPage({
                       view === ChartView.VOLATILITY ? setView(ChartView.VOLATILITY) : setView(ChartView.VOLATILITY)
                     }
                   >
-                    Impl. Vol.
+                    Impl. Vol. <QuestionHelper text={'IV = 2*feeTier* √(Volume/TickTVL)'} />
                   </ToggleElementFree>
                   <ToggleElementFree
                     isActive={view === ChartView.DENSITY}
