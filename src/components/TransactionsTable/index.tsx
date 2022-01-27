@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { DarkGreyCard } from 'components/Card'
 import Loader from 'components/Loader'
 import { AutoColumn } from 'components/Column'
-import { formatDollarAmount, formatAmount } from 'utils/numbers'
+import { formatDollarAmount, formatAmount, formatPercentAmount } from 'utils/numbers'
 import { shortenAddress, getEtherscanLink } from 'utils'
 import { Label, ClickableText } from 'components/Text'
 import { Transaction, TransactionType } from 'types'
@@ -83,13 +83,15 @@ const SORT_FIELD = {
   amountUSD: 'amountUSD',
   timestamp: 'timestamp',
   sender: 'sender',
-  amountToken0: 'amountToken0',
+  tick: 'tick',
   amountToken1: 'amountToken1',
 }
 
-const DataRow = ({ transaction, color }: { transaction: Transaction; color?: string }) => {
-  const abs0 = Math.abs(transaction.amountToken0)
-  const abs1 = Math.abs(transaction.amountToken1)
+const DataRow = ({ transaction, price, color }: { transaction: Transaction; price: Transaction; color?: string }) => {
+  const abs0 = transaction.type == TransactionType.SWAP ? transaction.tick : 1
+  const abs1 = price?.type == TransactionType.SWAP ? price?.tick : 1
+  const amt0 = transaction.amountToken0
+  const amt1 = transaction.amountToken1
   const outputTokenSymbol = transaction.amountToken0 < 0 ? transaction.token0Symbol : transaction.token1Symbol
   const inputTokenSymbol = transaction.amountToken1 < 0 ? transaction.token0Symbol : transaction.token1Symbol
   const [activeNetwork] = useActiveNetworkVersion()
@@ -110,10 +112,14 @@ const DataRow = ({ transaction, color }: { transaction: Transaction; color?: str
         {formatDollarAmount(transaction.amountUSD)}
       </Label>
       <Label end={1} fontWeight={400}>
-        <HoverInlineText text={`${formatAmount(abs0)}  ${transaction.token0Symbol}`} maxCharacters={16} />
+        <HoverInlineText text={`${formatAmount(Math.abs(amt0 / amt1), 6)} `} maxCharacters={16} />
       </Label>
       <Label end={1} fontWeight={400}>
-        <HoverInlineText text={`${formatAmount(abs1)}  ${transaction.token1Symbol}`} maxCharacters={16} />
+        <HoverInlineText
+          text={`${formatPercentAmount((abs1 - abs0) * 0.0001)}
+          `}
+          maxCharacters={20}
+        />
       </Label>
       <Label end={1} fontWeight={400}>
         <ExternalLink
@@ -132,7 +138,7 @@ const DataRow = ({ transaction, color }: { transaction: Transaction; color?: str
 
 export default function TransactionTable({
   transactions,
-  maxItems = 10,
+  maxItems = 100,
   color,
 }: {
   transactions: Transaction[]
@@ -159,7 +165,7 @@ export default function TransactionTable({
   }, [maxItems, transactions])
 
   // filter on txn type
-  const [txFilter, setTxFilter] = useState<TransactionType | undefined>(undefined)
+  const [txFilter, setTxFilter] = useState<TransactionType | undefined>(TransactionType.SWAP)
 
   const sortedTransactions = useMemo(() => {
     return transactions
@@ -241,11 +247,11 @@ export default function TransactionTable({
           <ClickableText color={theme.text2} onClick={() => handleSort(SORT_FIELD.amountUSD)} end={1}>
             Total Value {arrow(SORT_FIELD.amountUSD)}
           </ClickableText>
-          <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.amountToken0)}>
-            Token Amount {arrow(SORT_FIELD.amountToken0)}
+          <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.tick)}>
+            Price {arrow(SORT_FIELD.tick)}
           </ClickableText>
           <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.amountToken1)}>
-            Token Amount {arrow(SORT_FIELD.amountToken1)}
+            Slippage {arrow(SORT_FIELD.amountToken1)}
           </ClickableText>
           <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.sender)}>
             Account {arrow(SORT_FIELD.sender)}
@@ -260,7 +266,15 @@ export default function TransactionTable({
           if (t) {
             return (
               <React.Fragment key={i}>
-                <DataRow transaction={t} color={color} />
+                <DataRow
+                  transaction={t}
+                  price={
+                    sortedTransactions[i + 1]?.type == TransactionType.SWAP
+                      ? sortedTransactions[i + 1]
+                      : sortedTransactions[i + 2]
+                  }
+                  color={color}
+                />
                 <Break />
               </React.Fragment>
             )

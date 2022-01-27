@@ -83,6 +83,7 @@ const GLOBAL_TRANSACTIONS = gql`
         }
       }
       origin
+      tick
       amount0
       amount1
       amountUSD
@@ -188,6 +189,7 @@ interface TransactionResults {
     amount0: string
     amount1: string
     amountUSD: string
+    tick: string
   }[]
   mintsAs1: {
     timestamp: string
@@ -208,6 +210,7 @@ interface TransactionResults {
     amount0: string
     amount1: string
     amountUSD: string
+    tick: string
   }[]
   swapsAs0: {
     timestamp: string
@@ -228,6 +231,7 @@ interface TransactionResults {
     amount0: string
     amount1: string
     amountUSD: string
+    tick: string
   }[]
   swapsAs1: {
     timestamp: string
@@ -248,6 +252,7 @@ interface TransactionResults {
     amount0: string
     amount1: string
     amountUSD: string
+    tick: string
   }[]
   burnsAs0: {
     timestamp: string
@@ -268,6 +273,7 @@ interface TransactionResults {
     amount0: string
     amount1: string
     amountUSD: string
+    tick: string
   }[]
   burnsAs1: {
     timestamp: string
@@ -288,6 +294,7 @@ interface TransactionResults {
     amount0: string
     amount1: string
     amountUSD: string
+    tick: string
   }[]
 }
 
@@ -330,6 +337,7 @@ export async function fetchTokenTransactions(
         token1Symbol: formatTokenSymbol(m.pool.token1.id, m.pool.token1.symbol),
         token0Address: m.pool.token0.id,
         token1Address: m.pool.token1.id,
+        tick: parseFloat('0'),
         amountUSD: parseFloat(m.amountUSD),
         amountToken0: parseFloat(m.amount0),
         amountToken1: parseFloat(m.amount1),
@@ -345,6 +353,7 @@ export async function fetchTokenTransactions(
         token1Symbol: formatTokenSymbol(m.pool.token1.id, m.pool.token1.symbol),
         token0Address: m.pool.token0.id,
         token1Address: m.pool.token1.id,
+        tick: parseFloat('0'),
         amountUSD: parseFloat(m.amountUSD),
         amountToken0: parseFloat(m.amount0),
         amountToken1: parseFloat(m.amount1),
@@ -361,6 +370,7 @@ export async function fetchTokenTransactions(
         token1Symbol: formatTokenSymbol(m.pool.token1.id, m.pool.token1.symbol),
         token0Address: m.pool.token0.id,
         token1Address: m.pool.token1.id,
+        tick: parseFloat('0'),
         amountUSD: parseFloat(m.amountUSD),
         amountToken0: parseFloat(m.amount0),
         amountToken1: parseFloat(m.amount1),
@@ -376,6 +386,7 @@ export async function fetchTokenTransactions(
         token1Symbol: formatTokenSymbol(m.pool.token1.id, m.pool.token1.symbol),
         token0Address: m.pool.token0.id,
         token1Address: m.pool.token1.id,
+        tick: parseFloat('0'),
         amountUSD: parseFloat(m.amountUSD),
         amountToken0: parseFloat(m.amount0),
         amountToken1: parseFloat(m.amount1),
@@ -392,6 +403,7 @@ export async function fetchTokenTransactions(
         token1Symbol: formatTokenSymbol(m.pool.token1.id, m.pool.token1.symbol),
         token0Address: m.pool.token0.id,
         token1Address: m.pool.token1.id,
+        tick: parseFloat(m.tick),
         amountUSD: parseFloat(m.amountUSD),
         amountToken0: parseFloat(m.amount0),
         amountToken1: parseFloat(m.amount1),
@@ -408,6 +420,7 @@ export async function fetchTokenTransactions(
         token1Symbol: formatTokenSymbol(m.pool.token1.id, m.pool.token1.symbol),
         token0Address: m.pool.token0.id,
         token1Address: m.pool.token1.id,
+        tick: parseFloat(m.tick),
         amountUSD: parseFloat(m.amountUSD),
         amountToken0: parseFloat(m.amount0),
         amountToken1: parseFloat(m.amount1),

@@ -24,6 +24,7 @@ export type Transaction = {
   token1Symbol: string
   token0Address: string
   token1Address: string
+  tick: number
   amountUSD: number
   amountToken0: number
   amountToken1: number

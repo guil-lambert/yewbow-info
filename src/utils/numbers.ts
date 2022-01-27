@@ -39,8 +39,8 @@ export const formatAmount = (num: number | undefined, digits = 2) => {
 export const formatPercentAmount = (num: number | undefined, digits = 2) => {
   if (num === 0) return '0.00%'
   if (!num) return '-'
-  if (num < 0.0001) {
-    return '<0.01%'
+  if (Math.abs(num) < 0.0001) {
+    return '<0.0001%'
   }
   return numbro(num).format({
     average: true,

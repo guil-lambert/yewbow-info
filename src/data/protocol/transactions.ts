@@ -41,6 +41,7 @@ const GLOBAL_TRANSACTIONS = gql`
         amount0
         amount1
         amountUSD
+        tick
       }
       burns {
         pool {
@@ -78,6 +79,7 @@ type TransactionEntry = {
       }
     }
     origin: string
+    tick: string
     amount0: string
     amount1: string
     amountUSD: string
@@ -97,6 +99,7 @@ type TransactionEntry = {
     amount0: string
     amount1: string
     amountUSD: string
+    tick: string
   }[]
   burns: {
     pool: {
@@ -111,6 +114,7 @@ type TransactionEntry = {
     }
     owner: string
     origin: string
+    tick: string
     amount0: string
     amount1: string
     amountUSD: string
@@ -145,6 +149,7 @@ export async function fetchTopTransactions(
           token1Symbol: formatTokenSymbol(m.pool.token1.id, m.pool.token1.symbol),
           token0Address: m.pool.token0.id,
           token1Address: m.pool.token1.id,
+          tick: parseFloat('0'),
           amountUSD: parseFloat(m.amountUSD),
           amountToken0: parseFloat(m.amount0),
           amountToken1: parseFloat(m.amount1),
@@ -160,6 +165,7 @@ export async function fetchTopTransactions(
           token1Symbol: formatTokenSymbol(m.pool.token1.id, m.pool.token1.symbol),
           token0Address: m.pool.token0.id,
           token1Address: m.pool.token1.id,
+          tick: parseFloat('0'),
           amountUSD: parseFloat(m.amountUSD),
           amountToken0: parseFloat(m.amount0),
           amountToken1: parseFloat(m.amount1),
@@ -176,6 +182,7 @@ export async function fetchTopTransactions(
           token1Symbol: formatTokenSymbol(m.pool.token1.id, m.pool.token1.symbol),
           token0Address: m.pool.token0.id,
           token1Address: m.pool.token1.id,
+          tick: parseFloat(m.tick),
           amountUSD: parseFloat(m.amountUSD),
           amountToken0: parseFloat(m.amount0),
           amountToken1: parseFloat(m.amount1),
