@@ -33,10 +33,6 @@ export interface PoolData {
     derivedETH: number
   }
 
-  poolDayData: {
-    txCount: number
-    volumeUSD: number
-  }
   // for tick math
   liquidity: number
   sqrtPrice: number

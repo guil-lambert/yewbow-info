@@ -38,7 +38,7 @@ export const POOLS_BULK = (block: number | undefined, pools: string[]) => {
             decimals
             derivedETH
         }
-        poolDayData(first: 1, skip: 1, orderBy: date, orderDirection:desc) {
+        poolDayData(first: 5, orderBy: date, orderDirection:desc) {
           txCount
           volumeUSD
         }        
@@ -79,7 +79,7 @@ interface PoolFields {
   poolDayData: {
     txCount: string
     volumeUSD: string
-  }
+  }[]
   token0Price: string
   token1Price: string
   volumeUSD: string
@@ -180,7 +180,13 @@ export function usePoolDatas(poolAddresses: string[]): {
     const twoDay: PoolFields | undefined = parsed48[address]
     const week: PoolFields | undefined = parsedWeek[address]
 
-    const [volumeUSD, volumeUSDChange] =
+    const volumeUSD = current
+      ? current.poolDayData.length > 1
+        ? parseFloat(current.poolDayData[1]?.volumeUSD)
+        : parseFloat(current.poolDayData[0]?.volumeUSD)
+      : 1
+
+    const [volumeUSD0, volumeUSDChange] =
       current && oneDay && twoDay
         ? get2DayChange(current.volumeUSD, oneDay.volumeUSD, twoDay.volumeUSD)
         : current
@@ -194,7 +200,7 @@ export function usePoolDatas(poolAddresses: string[]): {
         ? parseFloat(current.volumeUSD)
         : 0
 
-    const [feesUSD, feesUSDChange] =
+    const [feesUSD0, feesUSDChange] =
       current && oneDay && twoDay
         ? get2DayChange(current.feesUSD, oneDay.feesUSD, twoDay.feesUSD)
         : current
@@ -214,6 +220,8 @@ export function usePoolDatas(poolAddresses: string[]): {
     const tvlToken1 = current ? parseFloat(current.totalValueLockedToken1) : 0
 
     const feeTier = current ? parseInt(current.feeTier) : 0
+
+    const feesUSD = (feeTier * volumeUSD) / 1000000
 
     const decs0 = current ? parseFloat(current.token0.decimals) : 0
     const decs1 = current ? parseFloat(current.token1.decimals) : 0
@@ -242,7 +250,7 @@ export function usePoolDatas(poolAddresses: string[]): {
     //const ethPrice = tvlUSD / (tvlToken1 + tvlToken0 * 1.0001 ** tick)
     const ethPrice = tvlUSD / (tvl0ETH + tvl1ETH)
     const volumeToken0 = current ? parseFloat(current.token0.derivedETH) : 0
-    const volumeToken1 = current ? parseFloat(current.poolDayData.volumeUSD) : 0
+    const volumeToken1 = current ? parseFloat(current.poolDayData[0].volumeUSD) : 0
     const volatility = (2 * feeTier * volumeUSD ** 0.5) / (10 ** 6 * totalLockedTick ** 0.5)
 
     if (current && volumeUSD > 1000 && totalLockedTick > 100) {
@@ -265,10 +273,6 @@ export function usePoolDatas(poolAddresses: string[]): {
           symbol: formatTokenSymbol(current.token1.id, current.token1.symbol),
           decimals: parseInt(current.token1.decimals),
           derivedETH: parseFloat(current.token1.derivedETH),
-        },
-        poolDayData: {
-          txCount: parseFloat(current.poolDayData.txCount),
-          volumeUSD: parseFloat(current.poolDayData.volumeUSD),
         },
         token0Price: parseFloat(current.token0Price),
         token1Price: parseFloat(current.token1Price),
