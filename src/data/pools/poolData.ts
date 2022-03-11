@@ -253,7 +253,7 @@ export function usePoolDatas(poolAddresses: string[]): {
     const volumeToken1 = current ? parseFloat(current.poolDayData[0].volumeUSD) : 0
     const volatility = (2 * feeTier * volumeUSD ** 0.5) / (10 ** 6 * totalLockedTick ** 0.5)
 
-    if (current && volumeUSD > 1000 && totalLockedTick > 100) {
+    if (current) {
       accum[address] = {
         address,
         feeTier,

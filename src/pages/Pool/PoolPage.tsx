@@ -7,6 +7,7 @@ import { feeTierPercent, getEtherscanLink } from 'utils'
 import { AutoColumn } from 'components/Column'
 import { RowBetween, RowFixed, AutoRow } from 'components/Row'
 import { TYPE, StyledInternalLink } from 'theme'
+import { Transaction, TransactionType } from 'types'
 import Loader, { LocalLoader } from 'components/Loader'
 import { ExternalLink, Download } from 'react-feather'
 import { ExternalLink as StyledExternalLink } from '../../theme/components'
@@ -94,6 +95,20 @@ export default function PoolPage({
   const [valueLabel, setValueLabel] = useState<string | undefined>()
   const decimalFactor = 10 ** (poolData?.token0.decimals / 4 - poolData?.token1.decimals / 4)
 
+  const formattedSwapData = useMemo(() => {
+    if (transactions) {
+      return transactions.map((txn) => {
+        return {
+          tick: txn.type == TransactionType.SWAP ? txn.tick : 1,
+          time: txn.type == TransactionType.SWAP ? txn.timestamp : 1,
+          amtUSD: txn.type == TransactionType.SWAP ? txn.amountUSD : 1,
+        }
+      })
+    } else {
+      return []
+    }
+  }, [transactions])
+
   const formattedTvlData = useMemo(() => {
     if (chartData) {
       return chartData.map((day) => {
@@ -175,14 +190,25 @@ export default function PoolPage({
       ? ss.slice(-29, -1).map((a, i) => a * 0.0001 - ss.slice(-28)[i] * 0.0001)
       : ss.length > 7
       ? ss.slice(-8, -1).map((a, i) => a * 0.0001 - ss.slice(-7)[i] * 0.0001)
-      : 0
+      : [0, 0]
 
   const sd =
     ss.length > 28
       ? '28d realized Vol = ' + formatPercentAmount(getStandardDeviation(diff) * 365 ** 0.5)
       : ss.length > 7
       ? '7d realized Vol = ' + formatPercentAmount(getStandardDeviation(diff) * 365 ** 0.5)
-      : 0
+      : [0, 0]
+
+  const tt = formattedSwapData.map(function (object) {
+    return object.time
+  })
+  const aa = formattedSwapData.map(function (object) {
+    return object.amtUSD
+  })
+  const ii = formattedSwapData.map(function (object) {
+    return object.tick
+  })
+
   //watchlist
   const sd0 = ss.length > 1 ? getStandardDeviation(diff) * 365 ** 0.5 : 0
   const [savedPools, addSavedPool] = useSavedPools()
@@ -256,7 +282,7 @@ export default function PoolPage({
             {activeNetwork !== EthereumNetworkInfo ? null : (
               <RowFixed>
                 <StyledExternalLink
-                  href={`https://app.uniswap.org/#/add/${poolData.token0.address}/${poolData.token1.address}/${poolData.feeTier}`}
+                  href={`https://app.yewbow.org/#/add/${poolData.token0.address}/${poolData.token1.address}/${poolData.feeTier}`}
                 >
                   <ButtonGray width="170px" mr="12px" style={{ height: '44px' }}>
                     <RowBetween>
@@ -266,7 +292,7 @@ export default function PoolPage({
                   </ButtonGray>
                 </StyledExternalLink>
                 <StyledExternalLink
-                  href={`https://app.uniswap.org/#/swap?inputCurrency=${poolData.token0.address}&outputCurrency=${poolData.token1.address}`}
+                  href={`https://app.yewbow.org/#/swap?inputCurrency=${poolData.token0.address}&outputCurrency=${poolData.token1.address}`}
                 >
                   <ButtonPrimary width="100px" style={{ height: '44px' }}>
                     Trade

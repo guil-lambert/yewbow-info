@@ -24,7 +24,42 @@ export default function PoolPage() {
 
   const [savedPools] = useSavedPools()
   const watchlistPools = usePoolDatas(savedPools)
+  const [listOfItems, setListOfItems] = React.useState([
+    { name: '0.01%', isChecked: true },
+    { name: '0.05%', isChecked: true },
+    { name: '0.3%', isChecked: true },
+    { name: '1% |', isChecked: true },
+    { name: 'Remove low liquidity tokens |', isChecked: true },
+    { name: 'Only ETH pairs', isChecked: false },
+    { name: 'Only stablecoin pairs |', isChecked: false },
+    { name: 'IV > 100%', isChecked: false },
+  ])
 
+  const updateListOfItems = (itemIndex: number, newsChecked: boolean) => {
+    const updatedListOfItems = [...listOfItems]
+    updatedListOfItems[itemIndex].isChecked = newsChecked
+    setListOfItems(updatedListOfItems)
+  }
+  const filteredPoolDatas = poolDatas.filter(
+    (obj) =>
+      (obj.feeTier == (listOfItems[0].isChecked ? 100 : 0) ||
+        obj.feeTier == (listOfItems[1].isChecked ? 500 : 0) ||
+        obj.feeTier == (listOfItems[2].isChecked ? 3000 : 0) ||
+        obj.feeTier == (listOfItems[3].isChecked ? 10000 : 0)) &&
+      (listOfItems[4].isChecked ? obj.totalLockedTick > 1000 : true) &&
+      (listOfItems[5].isChecked ? obj.token0.symbol == 'ETH' || obj.token1.symbol == 'ETH' : true) &&
+      (listOfItems[6].isChecked
+        ? obj.token0.symbol == 'USDC' ||
+          obj.token1.symbol == 'USDC' ||
+          obj.token0.symbol == 'DAI' ||
+          obj.token1.symbol == 'DAI' ||
+          obj.token0.symbol == 'RAI' ||
+          obj.token1.symbol == 'RAI' ||
+          obj.token0.symbol == 'USDT' ||
+          obj.token1.symbol == 'USDT'
+        : true) &&
+      (listOfItems[7].isChecked ? obj.volatility * 365 ** 0.5 * 100 >= 100 : true)
+  )
   return (
     <PageWrapper>
       <AutoColumn gap="lg">
@@ -44,8 +79,25 @@ export default function PoolPage() {
             </AutoColumn>
           </DarkGreyCard>
         </HideSmall>
-        <TYPE.main>All Pools</TYPE.main>
-        <PoolTable poolDatas={poolDatas} />
+        <TYPE.main>
+          Filtered Pools ({filteredPoolDatas.length}/{poolDatas.length})
+        </TYPE.main>
+        <div>
+          Select:
+          {listOfItems.map((item, index) => (
+            <label key={index}>
+              {' '}
+              <input
+                key={index}
+                type="checkbox"
+                checked={item.isChecked}
+                onChange={() => updateListOfItems(index, !item.isChecked)}
+              />{' '}
+              {item.name}{' '}
+            </label>
+          ))}
+        </div>
+        <PoolTable poolDatas={filteredPoolDatas} />
       </AutoColumn>
     </PageWrapper>
   )
