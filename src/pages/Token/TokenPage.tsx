@@ -107,6 +107,42 @@ export default function TokenPage({
   const poolDatas = usePoolDatas(poolsForToken ?? [])
   const transactions = useTokenTransactions(address)
   const chartData = useTokenChartData(address)
+  const [listOfItems, setListOfItems] = React.useState([
+    { name: '0.01%', isChecked: true },
+    { name: '0.05%', isChecked: true },
+    { name: '0.3%', isChecked: true },
+    { name: '1% |', isChecked: true },
+    { name: 'Remove low liquidity tokens |', isChecked: true },
+    { name: 'Only ETH pairs', isChecked: false },
+    { name: 'Only stablecoin pairs |', isChecked: false },
+    { name: 'IV > 100%', isChecked: false },
+  ])
+
+  const updateListOfItems = (itemIndex: number, newsChecked: boolean) => {
+    const updatedListOfItems = [...listOfItems]
+    updatedListOfItems[itemIndex].isChecked = newsChecked
+    setListOfItems(updatedListOfItems)
+  }
+  const filteredPoolDatas = poolDatas.filter(
+    (obj) =>
+      (obj.feeTier == (listOfItems[0].isChecked ? 100 : 0) ||
+        obj.feeTier == (listOfItems[1].isChecked ? 500 : 0) ||
+        obj.feeTier == (listOfItems[2].isChecked ? 3000 : 0) ||
+        obj.feeTier == (listOfItems[3].isChecked ? 10000 : 0)) &&
+      (listOfItems[4].isChecked ? obj.totalLockedTick > 1000 : true) &&
+      (listOfItems[5].isChecked ? obj.token0.symbol == 'ETH' || obj.token1.symbol == 'ETH' : true) &&
+      (listOfItems[6].isChecked
+        ? obj.token0.symbol == 'USDC' ||
+          obj.token1.symbol == 'USDC' ||
+          obj.token0.symbol == 'DAI' ||
+          obj.token1.symbol == 'DAI' ||
+          obj.token0.symbol == 'RAI' ||
+          obj.token1.symbol == 'RAI' ||
+          obj.token0.symbol == 'USDT' ||
+          obj.token1.symbol == 'USDT'
+        : true) &&
+      (listOfItems[7].isChecked ? obj.volatility * 365 ** 0.5 * 100 >= 100 : true)
+  )
 
   // check for link to CMC
   const cmcLink = useCMCLink(address)
@@ -138,7 +174,7 @@ export default function TokenPage({
   }, [chartData])
 
   // chart labels
-  const [view, setView] = useState(ChartView.PRICE)
+  const [view, setView] = useState(ChartView.TVL)
   const [latestValue, setLatestValue] = useState<number | undefined>()
   const [valueLabel, setValueLabel] = useState<string | undefined>()
   const [timeWindow] = useState(DEFAULT_TIME_WINDOW)
@@ -171,7 +207,7 @@ export default function TokenPage({
         !tokenData.exists ? (
           <LightGreyCard style={{ textAlign: 'center' }}>
             No pool has been created with this token yet. Create one
-            <StyledExternalLink style={{ marginLeft: '4px' }} href={`https://app.uniswap.org/#/add/${address}`}>
+            <StyledExternalLink style={{ marginLeft: '4px' }} href={`https://app.yewbow.org/#/add/${address}`}>
               here.
             </StyledExternalLink>
           </LightGreyCard>
@@ -234,7 +270,7 @@ export default function TokenPage({
                 </AutoColumn>
                 {activeNetwork !== EthereumNetworkInfo ? null : (
                   <RowFixed>
-                    <StyledExternalLink href={`https://app.uniswap.org/#/add/${address}`}>
+                    <StyledExternalLink href={`https://app.yewbow.org/#/add/${address}`}>
                       <ButtonGray width="170px" mr="12px" height={'100%'} style={{ height: '44px' }}>
                         <RowBetween>
                           <Download size={24} />
@@ -242,7 +278,7 @@ export default function TokenPage({
                         </RowBetween>
                       </ButtonGray>
                     </StyledExternalLink>
-                    <StyledExternalLink href={`https://app.uniswap.org/#/swap?inputCurrency=${address}`}>
+                    <StyledExternalLink href={`https://app.yewbow.org/#/swap?inputCurrency=${address}`}>
                       <ButtonPrimary width="100px" bgColor={backgroundColor} style={{ height: '44px' }}>
                         Trade
                       </ButtonPrimary>
@@ -386,8 +422,23 @@ export default function TokenPage({
               </DarkGreyCard>
             </ContentLayout>
             <TYPE.main>Pools</TYPE.main>
+            <div>
+              Select:
+              {listOfItems.map((item, index) => (
+                <label key={index}>
+                  {' '}
+                  <input
+                    key={index}
+                    type="checkbox"
+                    checked={item.isChecked}
+                    onChange={() => updateListOfItems(index, !item.isChecked)}
+                  />{' '}
+                  {item.name}{' '}
+                </label>
+              ))}
+            </div>
             <DarkGreyCard>
-              <PoolTable poolDatas={poolDatas} />
+              <PoolTable poolDatas={filteredPoolDatas} />
             </DarkGreyCard>
             <TYPE.main>Transactions</TYPE.main>
             <DarkGreyCard>
