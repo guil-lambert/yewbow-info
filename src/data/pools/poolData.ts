@@ -250,7 +250,7 @@ export function usePoolDatas(poolAddresses: string[]): {
     //const ethPrice = tvlUSD / (tvlToken1 + tvlToken0 * 1.0001 ** tick)
     const ethPrice = tvlUSD / (tvl0ETH + tvl1ETH)
     const volumeToken0 = current ? parseFloat(current.token0.derivedETH) : 0
-    const volumeToken1 = current ? parseFloat(current.poolDayData[0].volumeUSD) : 0
+    const volumeToken1 = current && current.poolDayData[0] ? parseFloat(current.poolDayData[0].volumeUSD) : 0
     const volatility = (2 * feeTier * volumeUSD ** 0.5) / (10 ** 6 * totalLockedTick ** 0.5)
 
     if (current) {

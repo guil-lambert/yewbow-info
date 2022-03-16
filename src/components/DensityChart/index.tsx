@@ -1,6 +1,18 @@
 import { fetchTicksSurroundingPrice, TickProcessed } from 'data/pools/tickData'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
-import { BarChart, Bar, LabelList, XAxis, Tooltip, ResponsiveContainer, ReferenceLine, Cell } from 'recharts'
+import {
+  BarChart,
+  Bar,
+  ComposedChart,
+  LabelList,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  ReferenceLine,
+  Cell,
+} from 'recharts'
 import Loader from 'components/Loader'
 import styled from 'styled-components'
 import useTheme from 'hooks/useTheme'
@@ -201,8 +213,9 @@ export default function DensityChart({ address }: DensityChartProps) {
 
             const totalLockedETH = tvl0ETH * poolData.tvlToken0 + tvl1ETH * poolData.tvlToken1
             const totalLockedTick = (tvlTick * poolData?.tvlUSD) / totalLockedETH
-
-            const volatilityTick = (2 * feeTier * poolData?.volumeUSD ** 0.5) / (10 ** 6 * totalLockedTick ** 0.5)
+            const dailyVolumeUSD = poolData ? poolData.volumeUSD : 1
+            const volatilityTick =
+              totalLockedTick > 0 ? (2 * feeTier * dailyVolumeUSD ** 0.5) / (10 ** 6 * totalLockedTick ** 0.5) : 0
             return {
               index: i,
               isCurrent: active,
@@ -211,7 +224,7 @@ export default function DensityChart({ address }: DensityChartProps) {
               price1: parseFloat(t.price1),
               tvlToken0: amount0,
               tvlToken1: amount1,
-              volatilityTick: volatilityTick,
+              volatilityTick: 100 * 365 ** 0.5 * volatilityTick,
             }
           })
         )
@@ -311,7 +324,7 @@ export default function DensityChart({ address }: DensityChartProps) {
     <Wrapper>
       {!loading ? (
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart
+          <ComposedChart
             width={500}
             height={300}
             data={zoomedData}
@@ -329,7 +342,21 @@ export default function DensityChart({ address }: DensityChartProps) {
               )}
             />
             <XAxis reversed={true} tick={false} />
+            <YAxis
+              yAxisId="left"
+              tick={false}
+              stroke={theme.blue1}
+              label={{ value: 'Liquidity', angle: -90, position: 'Left', fill: theme.blue1 }}
+            />
+            <YAxis
+              yAxisId="right"
+              allowDataOverflow={true}
+              stroke={theme.green1}
+              label={{ value: 'IV (%)', position: 'insideRight', dx: 35, dy: -20, fill: theme.green1 }}
+              orientation="right"
+            />
             <Bar
+              yAxisId="left"
               dataKey="activeLiquidity"
               fill="hsl(110, 63%, 42%)"
               isAnimationActive={false}
@@ -370,20 +397,20 @@ export default function DensityChart({ address }: DensityChartProps) {
                 content={(props) => <CurrentPriceLabel chartProps={props} poolData={poolData} data={zoomedData} />}
               />
             </Bar>
-          </BarChart>
+            <Line type="basis" strokeWidth={3} stroke="#ffffff" dot={false} yAxisId="right" dataKey="volatilityTick" />
+            <Line
+              type="basis"
+              strokeWidth={1}
+              stroke={theme.green1}
+              dot={false}
+              yAxisId="right"
+              dataKey="volatilityTick"
+            />
+          </ComposedChart>
         </ResponsiveContainer>
       ) : (
         <Loader />
       )}
-      <DTEsWrapper>
-        <DTEButton disabled={false} onClick={handleZoomOut}>
-          <small>-dte</small>
-        </DTEButton>
-        <DTEButton disabled={true}>{dte}</DTEButton>
-        <DTEButton disabled={atZoomMax} onClick={handleZoomIn}>
-          <small>+dte</small>
-        </DTEButton>
-      </DTEsWrapper>
       <ControlsWrapper>
         <ActionButton disabled={false} onClick={handleZoomOut}>
           -
