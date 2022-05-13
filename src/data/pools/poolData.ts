@@ -38,9 +38,13 @@ export const POOLS_BULK = (block: number | undefined, pools: string[]) => {
             decimals
             derivedETH
         }
-        poolDayData(first: 5, orderBy: date, orderDirection:desc) {
+        poolDayData(first: 95, orderBy: date, orderDirection:desc) {
           txCount
           volumeUSD
+          liquidity
+          feesUSD
+          volumeToken0
+          token1Price
         }        
         token0Price
         token1Price
@@ -79,6 +83,10 @@ interface PoolFields {
   poolDayData: {
     txCount: string
     volumeUSD: string
+    liquidity: string
+    feesUSD: string
+    volumeToken0: string
+    token1Price: string
   }[]
   token0Price: string
   token1Price: string
@@ -253,6 +261,38 @@ export function usePoolDatas(poolAddresses: string[]): {
     const volumeToken1 = current && current.poolDayData[0] ? parseFloat(current.poolDayData[0].volumeUSD) : 0
     const volatility = (2 * feeTier * volumeUSD ** 0.5) / (10 ** 6 * totalLockedTick ** 0.5)
 
+    const decimalFactor = 10 ** (decs0 / 4 - decs1 / 4)
+    const currentIV =
+      current && current.poolDayData[0]
+        ? (parseFloat(current.poolDayData[0].volumeToken0) * parseFloat(current.poolDayData[0].token1Price) ** 0.5) /
+          parseFloat(current.poolDayData[0].liquidity)
+        : 2
+    const minIV =
+      current && current.poolDayData[0]
+        ? current.poolDayData
+            .slice(0, -5)
+            .reduce(
+              (min, p) =>
+                (parseFloat(p.volumeToken0) * parseFloat(p.token1Price) ** 0.5) / parseFloat(p.liquidity) < min
+                  ? (parseFloat(p.volumeToken0) * parseFloat(p.token1Price) ** 0.5) / parseFloat(p.liquidity)
+                  : min,
+              Infinity
+            )
+        : 0
+    const maxIV =
+      current && current.poolDayData[0]
+        ? current.poolDayData
+            .slice(0, -5)
+            .reduce(
+              (max, p) =>
+                (parseFloat(p.volumeToken0) * parseFloat(p.token1Price) ** 0.5) / parseFloat(p.liquidity) > max
+                  ? (parseFloat(p.volumeToken0) * parseFloat(p.token1Price) ** 0.5) / parseFloat(p.liquidity)
+                  : max,
+              0
+            )
+        : 1
+    //const ivrank = (currentIV - minIV) / (maxIV - minIV)
+    const ivrank = (100 * currentIV - 100 * minIV) / (maxIV - minIV)
     if (current) {
       accum[address] = {
         address,
@@ -289,6 +329,7 @@ export function usePoolDatas(poolAddresses: string[]): {
         voltvl,
         totalLockedTick,
         volatility,
+        ivrank,
         tvlToken0,
         tvlToken1,
         feesUSD,

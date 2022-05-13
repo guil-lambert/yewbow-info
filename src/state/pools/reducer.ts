@@ -60,6 +60,7 @@ export interface PoolData {
   volLiq: number
   totalLockedTick: number
   volatility: number
+  ivrank: number
 
   // prices
   token0Price: number

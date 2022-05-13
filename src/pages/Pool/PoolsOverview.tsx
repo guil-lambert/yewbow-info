@@ -32,7 +32,7 @@ export default function PoolPage() {
     { name: 'Remove low liquidity tokens |', isChecked: true },
     { name: 'Only ETH pairs', isChecked: false },
     { name: 'Only stablecoin pairs |', isChecked: false },
-    { name: 'IV > 100%', isChecked: false },
+    { name: 'IVR > 25', isChecked: false },
   ])
 
   const updateListOfItems = (itemIndex: number, newsChecked: boolean) => {
@@ -46,7 +46,7 @@ export default function PoolPage() {
         obj.feeTier == (listOfItems[1].isChecked ? 500 : 0) ||
         obj.feeTier == (listOfItems[2].isChecked ? 3000 : 0) ||
         obj.feeTier == (listOfItems[3].isChecked ? 10000 : 0)) &&
-      (listOfItems[4].isChecked ? obj.totalLockedTick > 1000 : true) &&
+      (listOfItems[4].isChecked ? obj.totalLockedTick > 1000 && obj.volumeUSD > 0 : true) &&
       (listOfItems[5].isChecked ? obj.token0.symbol == 'ETH' || obj.token1.symbol == 'ETH' : true) &&
       (listOfItems[6].isChecked
         ? obj.token0.symbol == 'USDC' ||
@@ -58,7 +58,7 @@ export default function PoolPage() {
           obj.token0.symbol == 'USDT' ||
           obj.token1.symbol == 'USDT'
         : true) &&
-      (listOfItems[7].isChecked ? obj.volatility * 365 ** 0.5 * 100 >= 100 : true)
+      (listOfItems[7].isChecked ? obj.ivrank >= 25 : true)
   )
   return (
     <PageWrapper>

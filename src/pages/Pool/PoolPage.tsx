@@ -137,7 +137,7 @@ export default function PoolPage({
 
   const formattedVolatilityData = useMemo(() => {
     if (chartData) {
-      return chartData.map((day) => {
+      return chartData.slice(2).map((day) => {
         return {
           time: unixToDate(day.date),
           value:
@@ -155,7 +155,7 @@ export default function PoolPage({
 
   const formattedPriceData = useMemo(() => {
     if (chartData) {
-      return chartData.map((day) => {
+      return chartData.slice(2).map((day) => {
         return {
           time: unixToDate(day.date),
           value: Math.max(1 / decimalFactor, decimalFactor) ** 4 * 1.0001 ** -day.tick,

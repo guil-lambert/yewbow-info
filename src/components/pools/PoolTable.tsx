@@ -27,7 +27,7 @@ const ResponsiveGrid = styled.div`
   grid-gap: 1em;
   align-items: center;
 
-  grid-template-columns: 20px 3.5fr repeat(5, 1.5fr);
+  grid-template-columns: 20px 3.5fr repeat(6, 1.5fr);
 
   @media screen and (max-width: 900px) {
     grid-template-columns: 20px 1.5fr repeat(2, 1fr);
@@ -68,6 +68,7 @@ const SORT_FIELD = {
   volLiq: 'volLiq',
   totalLockedTick: 'totalLockedTick',
   volatility: 'volatility',
+  ivrank: 'ivrank',
 }
 
 const DataRow = ({ poolData, index }: { poolData: PoolData; index: number }) => {
@@ -102,6 +103,9 @@ const DataRow = ({ poolData, index }: { poolData: PoolData; index: number }) => 
         </Label>
         <Label end={1} fontWeight={400}>
           {formatAmount(poolData.volatility * 365 ** 0.5 * 100, 0)}%
+        </Label>
+        <Label end={1} fontWeight={400}>
+          {formatAmount(poolData.ivrank, 0)}
         </Label>
       </ResponsiveGrid>
     </LinkWrapper>
@@ -191,6 +195,10 @@ export default function PoolTable({ poolDatas, maxItems = MAX_ITEMS }: { poolDat
             <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.volatility)}>
               Implied Volatility <QuestionHelper text={'IV = 2*feeTier* √(Volume/TickTVL)'} />
               {arrow(SORT_FIELD.volatility)}
+            </ClickableText>
+            <ClickableText color={theme.text2} end={1} onClick={() => handleSort(SORT_FIELD.ivrank)}>
+              IV Rank (90d) <QuestionHelper text={'(IV - minIV) / (maxIV - minIV)'} />
+              {arrow(SORT_FIELD.ivrank)}
             </ClickableText>
           </ResponsiveGrid>
           <Break />
