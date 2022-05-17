@@ -42,9 +42,7 @@ const DataCard = ({ poolData }: { poolData: PoolData }) => {
             </GreyBadge>
           </RowFixed>
           <RowFixed>
-            <TYPE.label mr="6px">
-              {formatAmount((poolData.volLiq * 100) / 0.05)}% | APY: {formatAmount(poolData.voltvl * 365 * 100)}%
-            </TYPE.label>
+            <TYPE.label mr="6px">IVR: {formatAmount(poolData.ivrank, 0)}</TYPE.label>
           </RowFixed>
         </AutoColumn>
       </Wrapper>
@@ -58,7 +56,7 @@ export default function TopPoolMovers() {
   const topVolume = useMemo(() => {
     return Object.values(allPools)
       .sort(({ data: a }, { data: b }) => {
-        return a && b ? (a?.volLiq > b?.volLiq ? -1 : 1) : -1
+        return a && b ? (a?.ivrank > b?.ivrank ? -1 : 1) : -1
       })
       .slice(0, Math.min(20, Object.values(allPools).length))
   }, [allPools])

@@ -115,7 +115,7 @@ export default function TokenPage({
     { name: 'Remove low liquidity tokens |', isChecked: true },
     { name: 'Only ETH pairs', isChecked: false },
     { name: 'Only stablecoin pairs |', isChecked: false },
-    { name: 'IV > 100%', isChecked: false },
+    { name: 'IVR > 20', isChecked: false },
   ])
 
   const updateListOfItems = (itemIndex: number, newsChecked: boolean) => {
@@ -141,7 +141,7 @@ export default function TokenPage({
           obj.token0.symbol == 'USDT' ||
           obj.token1.symbol == 'USDT'
         : true) &&
-      (listOfItems[7].isChecked ? obj.volatility * 365 ** 0.5 * 100 >= 100 : true)
+      (listOfItems[7].isChecked ? obj.ivrank > 20 : true)
   )
 
   // check for link to CMC
