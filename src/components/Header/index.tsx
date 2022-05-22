@@ -3,8 +3,10 @@ import { NavLink } from 'react-router-dom'
 import { darken } from 'polished'
 import styled from 'styled-components'
 import Logo from '../../assets/svg/logo.svg'
+import { ExternalLink as StyledExternalLink } from '../../theme/components'
 import Menu from '../Menu'
 import Row, { RowFixed, RowBetween } from '../Row'
+import { ButtonGray, ButtonPrimary } from 'components/Button'
 import SearchSmall from 'components/Search'
 import NetworkDropdown from 'components/Menu/NetworkDropdown'
 import { useActiveNetworkVersion } from 'state/application/hooks'
@@ -179,6 +181,11 @@ export default function Header() {
           <StyledNavLink id={`stake-nav-link`} to={networkPrefix(activeNewtork) + 'tokens'}>
             Tokens
           </StyledNavLink>
+          <StyledExternalLink href={'https://app.yewbow.org'}>
+            <ButtonGray width="200px" style={{ height: '44px' }}>
+              Manage Positions
+            </ButtonGray>
+          </StyledExternalLink>
         </HeaderLinks>
       </HeaderRow>
       <HeaderControls>
