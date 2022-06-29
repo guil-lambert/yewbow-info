@@ -65,6 +65,7 @@ const ResponsiveRow = styled(RowBetween)`
 enum ChartView {
   TVL,
   VOL,
+  FEES,
   DENSITY,
   PRICE,
   VOLATILITY,
@@ -146,6 +147,20 @@ export default function PoolPage({
             365 ** 0.5 *
             (((day.feesUSD / day.volumeUSD) * day.volumeToken0 * day.token1Price ** 0.5 * 10 ** 18) / day.liquidity) **
               0.5,
+        }
+      })
+    } else {
+      return []
+    }
+  }, [chartData])
+
+  const formattedFeesData = useMemo(() => {
+    if (chartData) {
+      return chartData.slice(2).map((day) => {
+        return {
+          time: unixToDate(day.date),
+          valueAlt: day.feeGrowthGlobal0X128 / 2 ** 128,
+          value: day.feeGrowthGlobal1X128 / 2 ** 128,
         }
       })
     } else {
@@ -389,6 +404,13 @@ export default function PoolPage({
                     TVL
                   </ToggleElementFree>
                   <ToggleElementFree
+                    isActive={view === ChartView.FEES}
+                    fontSize="12px"
+                    onClick={() => (view === ChartView.FEES ? setView(ChartView.TVL) : setView(ChartView.FEES))}
+                  >
+                    Fees
+                  </ToggleElementFree>
+                  <ToggleElementFree
                     isActive={view === ChartView.PRICE}
                     fontSize="12px"
                     onClick={() => (view === ChartView.PRICE ? setView(ChartView.DENSITY) : setView(ChartView.PRICE))}
@@ -444,6 +466,18 @@ export default function PoolPage({
                   value={latestValue}
                   label={valueLabel}
                   yAxisLabel={poolData.token0.symbol + ' per ' + poolData.token1.symbol}
+                />
+              ) : view === ChartView.FEES ? (
+                <LineChart
+                  data={formattedFeesData}
+                  color={backgroundColor}
+                  minHeight={340}
+                  yAxisLabel={'feeGrowthGlobal (' + poolData.token0.symbol + ')'}
+                  yAxisLabelAlt={'feeGrowthGlobal (' + poolData.token1.symbol + ')'}
+                  setValue={setLatestValue}
+                  setLabel={setValueLabel}
+                  value={latestValue}
+                  label={valueLabel}
                 />
               ) : view === ChartView.VOLATILITY ? (
                 <LineChart

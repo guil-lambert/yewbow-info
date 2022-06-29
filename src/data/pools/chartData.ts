@@ -35,6 +35,8 @@ const POOL_CHART = gql`
       orderDirection: asc
       subgraphError: allow
     ) {
+      feeGrowthGlobal0X128
+      feeGrowthGlobal1X128
       date
       volumeUSD
       volumeToken0
@@ -53,6 +55,8 @@ const POOL_CHART = gql`
 interface ChartResults {
   poolDayDatas: {
     date: number
+    feeGrowthGlobal0X128: string
+    feeGrowthGlobal1X128: string
     volumeUSD: string
     volumeToken0: string
     volumeToken1: string
@@ -69,6 +73,8 @@ interface ChartResults {
 export async function fetchPoolChartData(address: string, client: ApolloClient<NormalizedCacheObject>) {
   let data: {
     date: number
+    feeGrowthGlobal0X128: string
+    feeGrowthGlobal1X128: string
     volumeUSD: string
     volumeToken0: string
     volumeToken1: string
@@ -122,6 +128,8 @@ export async function fetchPoolChartData(address: string, client: ApolloClient<N
       accum[roundedDate] = {
         date: dayData.date,
         volumeUSD: parseFloat(dayData.volumeUSD),
+        feeGrowthGlobal0X128: parseFloat(dayData.feeGrowthGlobal0X128),
+        feeGrowthGlobal1X128: parseFloat(dayData.feeGrowthGlobal1X128),
         volumeToken0: parseFloat(dayData.volumeToken0),
         volumeToken1: parseFloat(dayData.volumeToken1),
         totalValueLockedUSD: parseFloat(dayData.tvlUSD),
@@ -146,6 +154,8 @@ export async function fetchPoolChartData(address: string, client: ApolloClient<N
       if (!Object.keys(formattedExisting).includes(currentDayIndex.toString())) {
         formattedExisting[currentDayIndex] = {
           date: nextDay,
+          feeGrowthGlobal0X128: 0,
+          feeGrowthGlobal1X128: 0,
           volumeUSD: 0,
           volumeToken0: 0,
           volumeToken1: 0,

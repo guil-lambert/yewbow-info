@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, ReactNode } from 'react'
-import { ResponsiveContainer, ReferenceLine, XAxis, YAxis, Tooltip, AreaChart, Area } from 'recharts'
+import { ComposedChart, ResponsiveContainer, ReferenceLine, XAxis, YAxis, Tooltip, AreaChart, Area } from 'recharts'
 import styled from 'styled-components'
 import Card from 'components/Card'
 import { RowBetween } from 'components/Row'
@@ -27,10 +27,12 @@ const Wrapper = styled(Card)`
 export type LineChartProps = {
   data: any[]
   color?: string | undefined
+  colorAlt?: string | undefined
   height?: number | undefined
   minHeight?: number
   referenceLine?: number
   yAxisLabel?: string
+  yAxisLabelAlt?: string
   setValue?: Dispatch<SetStateAction<number | undefined>> // used for value on hover
   setLabel?: Dispatch<SetStateAction<string | undefined>> // used for label of valye
   value?: number
@@ -44,6 +46,7 @@ export type LineChartProps = {
 const Chart = ({
   data,
   color = '#56B2A4',
+  colorAlt = 'hsl(110, 63%, 42%)',
   value,
   label,
   setValue,
@@ -52,7 +55,8 @@ const Chart = ({
   topRight,
   bottomLeft,
   bottomRight,
-  yAxisLabel = 'bar',
+  yAxisLabel = '',
+  yAxisLabelAlt = '',
   referenceLine = -1,
   minHeight = DEFAULT_HEIGHT,
   ...rest
@@ -86,7 +90,14 @@ const Chart = ({
               <stop offset="100%" stopColor={color} stopOpacity={0} />
             </linearGradient>
           </defs>
+          <defs>
+            <linearGradient id="gradientAlt" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor={darken(0.03, colorAlt)} stopOpacity={0.125} />
+              <stop offset="100%" stopColor={colorAlt} stopOpacity={0} />
+            </linearGradient>
+          </defs>
           <YAxis
+            yAxisId="left"
             dataKey="value"
             tick={{ fontSize: 10 }}
             axisLine={false}
@@ -94,9 +105,22 @@ const Chart = ({
             minTickGap={10}
             interval={0}
             tickCount={4}
-            label={{ value: yAxisLabel, angle: -90, position: 'insideLeft' }}
+            label={{ value: yAxisLabel, angle: -90, position: 'insideLeft', dy: 100 }}
+          />
+          <YAxis
+            yAxisId="right"
+            dataKey="valueAlt"
+            tick={{ fontSize: 10, fill: colorAlt }}
+            axisLine={false}
+            tickLine={false}
+            minTickGap={10}
+            interval={0}
+            tickCount={4}
+            label={{ value: yAxisLabelAlt, angle: 90, position: 'insideRight', dx: 20, dy: 100, fill: colorAlt }}
+            orientation="right"
           />
           <ReferenceLine
+            yAxisId="left"
             y={referenceLine > 0 ? referenceLine : 0}
             label={{ value: referenceLine > 0 ? 'RV' : 0, angle: 0, position: 'right' }}
             stroke="#000"
@@ -123,7 +147,15 @@ const Chart = ({
               if (setLabel && label !== formattedTime) setLabel(formattedTime)
             }}
           />
-          <Area dataKey="value" type="monotone" stroke={color} fill="url(#gradient)" strokeWidth={2} />
+          <Area yAxisId="left" dataKey="value" type="monotone" stroke={color} fill="url(#gradient)" strokeWidth={2} />
+          <Area
+            yAxisId="right"
+            dataKey="valueAlt"
+            type="monotone"
+            stroke={colorAlt}
+            fill="url(#gradientAlt)"
+            strokeWidth={2}
+          />
         </AreaChart>
       </ResponsiveContainer>
       <RowBetween>

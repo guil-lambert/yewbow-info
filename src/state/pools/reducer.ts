@@ -82,6 +82,8 @@ export interface PoolData {
 
 export type PoolChartEntry = {
   date: number
+  feeGrowthGlobal0X128: number
+  feeGrowthGlobal1X128: number
   volumeUSD: number
   volumeToken0: number
   volumeToken1: number
