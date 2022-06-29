@@ -372,7 +372,11 @@ export default function PoolPage({
                           ? formatPercentAmount(latestValue)
                           : view === ChartView.PRICE
                           ? formatAmount(latestValue)
-                          : formatDollarAmount(latestValue)
+                          : view === ChartView.TVL
+                          ? formatDollarAmount(latestValue)
+                          : view === ChartView.FEES
+                          ? ''
+                          : formatAmount(latestValue)
                         : view === ChartView.PRICE
                         ? formatAmount(formattedPriceData[formattedPriceData.length - 1]?.value)
                         : view === ChartView.VOLATILITY
@@ -381,7 +385,7 @@ export default function PoolPage({
                         ? formatDollarAmount(formattedVolumeData[formattedVolumeData.length - 1]?.value)
                         : view === ChartView.DENSITY
                         ? ''
-                        : formatDollarAmount(formattedTvlData[formattedTvlData.length - 1]?.value)}{' '}
+                        : ''}{' '}
                     </MonoSpace>
                   </TYPE.label>
                   <TYPE.main height="20px" fontSize="12px">
