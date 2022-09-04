@@ -9,7 +9,7 @@ import {
 } from './actions'
 import { createReducer } from '@reduxjs/toolkit'
 import { PriceChartEntry, Transaction } from 'types'
-import { SupportedNetwork, SUPPORTED_NETWORK_VERSIONS } from 'constants/networks'
+import { SupportedNetwork } from 'constants/networks'
 
 export type TokenData = {
   // token is in some pool on uniswap
@@ -72,6 +72,8 @@ export const initialState: TokensState = {
     [SupportedNetwork.ETHEREUM]: {},
     [SupportedNetwork.ARBITRUM]: {},
     [SupportedNetwork.OPTIMISM]: {},
+    [SupportedNetwork.POLYGON]: {},
+    [SupportedNetwork.CELO]: {},
   },
 }
 

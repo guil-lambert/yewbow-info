@@ -1,5 +1,5 @@
 import { RowFixed, RowBetween } from 'components/Row'
-import { SUPPORTED_NETWORK_VERSIONS } from 'constants/networks'
+import { CeloNetworkInfo, PolygonNetworkInfo, SUPPORTED_NETWORK_VERSIONS } from 'constants/networks'
 import useTheme from 'hooks/useTheme'
 import React, { useState, useRef } from 'react'
 import { ChevronDown } from 'react-feather'
@@ -100,8 +100,8 @@ export default function NetworkDropdown() {
           <TYPE.main fontSize="14px" color={theme.text1} ml="8px" mt="-2px" mr="2px" style={{ whiteSpace: 'nowrap' }}>
             {activeNetwork.name}
           </TYPE.main>
-          {activeNetwork === EthereumNetworkInfo ? null : (
-            <Badge bgColor={activeNetwork.primaryColor} style={{ margin: '0 4px' }}>
+          {[EthereumNetworkInfo, PolygonNetworkInfo, CeloNetworkInfo].includes(activeNetwork) ? null : (
+            <Badge bgColor={activeNetwork.primaryColor} style={{ color: '#fff', margin: '0 4px' }}>
               L2
             </Badge>
           )}
