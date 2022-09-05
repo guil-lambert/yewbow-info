@@ -30,7 +30,7 @@ import QuestionHelper from 'components/QuestionHelper'
 import { MonoSpace } from 'components/shared'
 import { useActiveNetworkVersion } from 'state/application/hooks'
 import { networkPrefix } from 'utils/networkPrefix'
-import { EthereumNetworkInfo } from 'constants/networks'
+import { EthereumNetworkInfo, ArbitrumNetworkInfo } from 'constants/networks'
 import { GenericImageWrapper } from 'components/Logo'
 
 const ContentLayout = styled.div`
@@ -430,13 +430,15 @@ export default function PoolPage({
                   >
                     Impl. Vol. <QuestionHelper text={'IV = 2*feeTier* √(Volume/TickTVL)'} />
                   </ToggleElementFree>
-                  <ToggleElementFree
-                    isActive={view === ChartView.DENSITY}
-                    fontSize="12px"
-                    onClick={() => (view === ChartView.DENSITY ? setView(ChartView.VOL) : setView(ChartView.DENSITY))}
-                  >
-                    Liquidity
-                  </ToggleElementFree>
+                  {activeNetwork === ArbitrumNetworkInfo ? null : (
+                    <ToggleElementFree
+                      isActive={view === ChartView.DENSITY}
+                      fontSize="12px"
+                      onClick={() => (view === ChartView.DENSITY ? setView(ChartView.VOL) : setView(ChartView.DENSITY))}
+                    >
+                      Liquidity
+                    </ToggleElementFree>
+                  )}
                 </ToggleWrapper>
               </RowBetween>
               {view === ChartView.TVL ? (
