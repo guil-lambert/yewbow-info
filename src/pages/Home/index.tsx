@@ -140,7 +140,7 @@ export default function Home() {
         obj.feeTier == (listOfItems[1].isChecked ? 500 : 0) ||
         obj.feeTier == (listOfItems[2].isChecked ? 3000 : 0) ||
         obj.feeTier == (listOfItems[3].isChecked ? 10000 : 0)) &&
-      (listOfItems[4].isChecked ? obj.totalLockedTick > 100 : true) &&
+      (listOfItems[4].isChecked ? obj.totalLockedTick > 100 && obj.volumeUSD > 10 : true) &&
       (listOfItems[5].isChecked ? obj.token0.symbol == 'ETH' || obj.token1.symbol == 'ETH' : true) &&
       (listOfItems[6].isChecked
         ? obj.token0.symbol == 'USDC' ||
